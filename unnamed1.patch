@@ -1,0 +1,10 @@
+Index: components/com_acymailing/test2.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- components/com_acymailing/test2.php	(date 1474948169000)
++++ components/com_acymailing/test2.php	(date 1474948169000)
+@@ -1,1 +0,0 @@
+-
+\ No newline at end of file
