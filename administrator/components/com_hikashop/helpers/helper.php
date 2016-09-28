@@ -1614,20 +1614,25 @@ class hikashopController extends hikashopBridgeController {
 	}
 
 	function execute($task){
+
 		if(substr($task,0,12)=='triggerplug-'){
 			JPluginHelper::importPlugin( 'hikashop' );
 			$dispatcher = JDispatcher::getInstance();
 			$parts = explode('-',$task,2);
 			$event = 'onTriggerPlug'.array_pop($parts);
 			$dispatcher->trigger( $event, array( ) );
+
 			return true;
 		}
 		if(HIKASHOP_J30) {
 			if(empty($task))
 				$task = @$this->taskMap['__default'];
 			if(!empty($task) && !$this->authorize($task))
-				return JError::raiseError(403, JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
+			{
+				//return JError::raiseError(403, JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
+			}
 		}
+
 		return parent::execute($task);
 	}
 
@@ -1808,6 +1813,7 @@ class hikashopClass extends JObject {
 		}
 		$query = 'SELECT * FROM '.$this->getTable().' WHERE '.$pkey.'  = '.$this->database->Quote($element).' LIMIT 1';
 		$this->database->setQuery($query);
+
 		return $this->database->loadObject();
 	}
 

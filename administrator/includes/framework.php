@@ -56,6 +56,8 @@ switch ($config->error_reporting)
 {
 	case 'default':
 	case '-1':
+	error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_WARNING);
+	ini_set('display_errors', 1);
 		break;
 
 	case 'none':
@@ -77,7 +79,7 @@ switch ($config->error_reporting)
 		break;
 
 	case 'development':
-		error_reporting(-1);
+		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_WARNING);
 		ini_set('display_errors', 1);
 
 		break;
@@ -97,4 +99,44 @@ unset($config);
 if (JDEBUG)
 {
 	$_PROFILER = JProfiler::getInstance('Application');
+}
+
+declare(ticks=10);
+
+function tick_handler() {
+	global $backtrace;
+	$backtrace=debug_backtrace();
+	//$GLOBALS['dbg_stack'][] = debug_backtrace();
+	//writeLog($backtrace);
+
+}
+
+function shutdown() {
+	global $backtrace;
+	$output     = "";
+	$output .= "<hr /><div> Error" .  '<br /><table border="1" cellpadding="2" cellspacing="2">';
+
+	$stacks     = $backtrace;
+
+	$output .= "<thead><tr><th><strong>File</strong></th><th><strong>Line</strong></th><th><strong>Function</strong></th>".
+		"</tr></thead>";
+	foreach($stacks as $_stack)
+	{
+		if (!isset($_stack['file'])) $_stack['file'] = '[PHP Kernel]';
+		if (!isset($_stack['line'])) $_stack['line'] = '';
+
+		$output .=  "<tr><td>{$_stack["file"]}</td><td>{$_stack["line"]}</td>".
+			"<td>{$_stack["function"]}</td></tr>";
+	}
+	$output .=  "</table></div><hr /></p>";
+	echo $output;
+
+
+
+}
+//register_tick_function('tick_handler');
+if(!JDEBUG)
+{
+	register_tick_function('tick_handler');
+	register_shutdown_function('shutdown');
 }

@@ -3,7 +3,13 @@
 	<fields name="params">
 		<fieldset
 			name="advanced">
+			<field name="module_image" type="media"
+				   label="Module image"
+				   description="Module image" />
 
+			<field name="module_image_tip" type="media"
+				   label="Module image tip"
+				   description="Module image tip" />
 			<field
 				name="module_tag"
 				type="moduletag"

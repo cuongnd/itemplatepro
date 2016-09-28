@@ -11,6 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class hikashopFieldClass extends hikashopClass {
 
+	public static $list_md5;
 	var $tables = array('field');
 	var $pkeys = array('field_id');
 	var $namekeys = array();
@@ -111,8 +112,15 @@ class hikashopFieldClass extends hikashopClass {
 			}
 			if(!empty($filters)) $filters = ' AND '.$filters;
 			hikashop_addACLFilters($this->where,'field_access','a');
-			$this->database->setQuery('SELECT * FROM '.hikashop_table('field').' as a WHERE '.implode(' AND ',$this->where).' '.$filters.' ORDER BY a.`field_ordering` ASC');
-			$data[$key] = $this->database->loadObjectList('field_namekey');
+			$query='SELECT * FROM '.hikashop_table('field').' as a WHERE '.implode(' AND ',$this->where).' '.$filters.' ORDER BY a.`field_ordering` ASC';
+			$md5_query=md5($query);
+			if(!isset(static::$list_md5[$md5_query])){
+				$this->database->setQuery($query);
+				static::$list_md5[$md5_query]=$this->database->loadObjectList('field_namekey');
+			}
+
+
+			$data[$key] = static::$list_md5[$md5_query];
 		}
 		return $data[$key];
 	}

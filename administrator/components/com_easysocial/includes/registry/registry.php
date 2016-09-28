@@ -37,9 +37,7 @@ class SocialRegistry
 		// Load our helpers
 		$name	= FD::getInstance( 'Version' )->getCodename();
 		$path	= dirname( __FILE__ ) . '/helpers/' . $name . '.php';
-
 		require_once( $path );
-
 		$className		= 'SocialRegistry' . ucfirst($name);
 
 		$this->helper	= new $className( '' );

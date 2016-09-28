@@ -23,7 +23,7 @@ if ($saveOrder)
 	$saveOrderingUrl = 'index.php?option=com_modules&task=modules.saveOrderAjax&tmpl=component';
 	JHtml::_('sortablelist.sortable', 'moduleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
-$colSpan = $clientId === 1 ? 9 : 10;
+$colSpan = $clientId === 1 ? 10 : 12;
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_modules'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty( $this->sidebar)) : ?>
@@ -69,6 +69,13 @@ $colSpan = $clientId === 1 ? 9 : 10;
 							<?php echo JHtml::_('searchtools.sort', 'COM_MODULES_HEADING_PAGES', 'pages', $listDirn, $listOrder); ?>
 						</th>
 						<?php endif; ?>
+						<th width="10%" class="nowrap hidden-phone">
+							<?php echo JText::_('Icon') ?>
+						</th>
+						<th width="10%" class="nowrap hidden-phone">
+							<?php echo JText::_('Icon tip') ?>
+						</th>
+
 						<th width="10%" class="nowrap hidden-phone">
 							<?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ACCESS', 'ag.title', $listDirn, $listOrder); ?>
 						</th>
@@ -183,6 +190,25 @@ $colSpan = $clientId === 1 ? 9 : 10;
 							<?php echo $item->pages; ?>
 						</td>
 						<?php endif; ?>
+
+						<td class="small hidden-phone">
+							<?php if ($image_path = $item->params->get('module_image')) { ?>
+								<div style="background: #0388cd;width: 50px">
+									<img class="image img-thumbnail" style="width: 40px; margin: 0 auto"
+										 src="<?php echo $this->escape(JUri::root() . $image_path); ?>">
+								</div>
+							<?php } ?>
+						</td>
+						<td class="small hidden-phone">
+							<?php if ($image_path = $item->params->get('module_image_tip')) { ?>
+								<div style="background: #0388cd;width: 50px">
+									<img class="image img-thumbnail" style="width: 40px; margin: 0 auto"
+										 src="<?php echo $this->escape(JUri::root() . $image_path); ?>">
+								</div>
+							<?php } ?>
+						</td>
+
+
 						<td class="small hidden-phone">
 							<?php echo $this->escape($item->access_level); ?>
 						</td>

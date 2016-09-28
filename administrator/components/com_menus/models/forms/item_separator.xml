@@ -22,6 +22,28 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field name="menu_image" type="media"
+				   label="COM_MENUS_ITEM_FIELD_MENU_IMAGE_LABEL"
+				   description="COM_MENUS_ITEM_FIELD_MENU_IMAGE_DESC" />
+
+			<field name="menu_image" type="media"
+				   label="COM_MENUS_ITEM_FIELD_MENU_IMAGE_LABEL"
+				   description="COM_MENUS_ITEM_FIELD_MENU_IMAGE_DESC" />
+
+			<field name="menu_image_tip" type="media"
+				   label="image tip"
+				   description="image tip" />
+			<field addfieldpath="modules/mod_zt_tabs/admin/elements/" name="type" type="jvtype" default="moduleID" label="Type tabs:" description="Do you want to use the content code to display with tab">
+				<option value="">- Select type -</option>
+				<option value="moduleID">Modules</option>
+				<option value="categoryID">Contents</option>
+			</field>
+
+			<field name="moduleID-position" type="jvposition" default="left" label="Select a position" description="Select module position which will display in tabs" />
+			<field name="jv_selection" type="jvselection" default="" label="Select" description="Select">
+			</field>
+
+
 			<field
 				name="menu_show"
 				type="radio"

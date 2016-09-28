@@ -429,7 +429,7 @@ function hikashop_send_comment(){ return hikaVote.vote(0,"hikashop_vote_rating_i
 function hikashop_send_vote(rating, from){ return hikaVote.vote(rating, from); }
 		';
 		$doc = JFactory::getDocument();
-		$doc->addScriptDeclaration("\n<!--\n" . $js . "\n//-->\n");
+		$doc->addScriptDeclaration("\n" . $js . "\n");
 	}
 
 	function sendNotifComment($vote_id, $comment, $vote_ref_id, $user_id, $pseudo, $email, $vote_type){

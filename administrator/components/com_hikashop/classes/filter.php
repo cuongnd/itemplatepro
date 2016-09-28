@@ -11,6 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class hikashopFilterClass extends hikashopClass {
 
+	public static $list_md5_query;
 	var $tables = array('filter');
 	var $pkeys = array('filter_id');
 	var $toggle = array('filter_published' => 'filter_id');
@@ -277,8 +278,15 @@ class hikashopFilterClass extends hikashopClass {
 		$conditions = array('filter_published = 1');
 		hikashop_addACLFilters($conditions,'filter_access');
 		$query='SELECT * FROM '.hikashop_table('filter').' WHERE '.implode(' AND ',$conditions).' ORDER BY filter_ordering';
-		$database->setQuery($query);
-		$filters=$database->loadObjectList();
+		$md5_query=md5($query);
+		if(!isset(static::$list_md5_query[$md5_query]))
+		{
+			$this->database->setQuery($query);
+			static::$list_md5_query[$md5_query] =$database->loadObjectList();
+		}
+
+
+		$filters=static::$list_md5_query[$md5_query];
 
 		$filterList=array();
 		foreach($filters as $filter){

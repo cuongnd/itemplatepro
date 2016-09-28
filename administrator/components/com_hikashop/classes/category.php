@@ -17,12 +17,36 @@ class hikashopCategoryClass extends hikashopClass {
 	var $type = 'product';
 	var $query = '';
 	var $parentObject = '';
-
+	public static $list_md5;
 	function setType($type) {
 		$this->type = $type;
 	}
+	public static function get_all_category(){
+		$db=JFactory::getDbo();
+		$query=$db->getQuery(true);
+		//get template menu type
+		$query->clear()
+			->select('category.*')
+			->from('#__hikashop_category AS category')
+			->leftJoin('#__hikashop_file AS file_icon ON file_icon.file_ref_id=category.category_id')
+			->where('file_icon.file_type='.$query->q('category_icon'))
+			->select('GROUP_CONCAT(file_icon.file_path SEPARATOR  ";") AS list_icon')
 
+			->leftJoin('#__hikashop_file AS file_image ON file_image.file_ref_id=category.category_id')
+			->where('file_image.file_type='.$query->q('category'))
+			->select('GROUP_CONCAT(file_image.file_path SEPARATOR  ";") AS list_image')
+			->group('category.category_id')
+		;
+		$md5_query=md5($query);
+		if(!isset(static::$list_md5[$md5_query])){
+			$db->setQuery($query);
+			static::$list_md5[$md5_query]=$db->loadObjectList();
+		}
+		$list_all_category=static::$list_md5[$md5_query];
+		return $list_all_category;
+	}
 	function get($element, $withimage = false) {
+
 		if(in_array($element, array('product', 'status', 'tax', 'manufacturer')))
 			$this->getMainElement($element);
 
@@ -30,7 +54,7 @@ class hikashopCategoryClass extends hikashopClass {
 			return null;
 
 		if($withimage) {
-			$query = 'SELECT a.*,b.* FROM '.hikashop_table(end($this->tables)).' AS a LEFT JOIN '.hikashop_table('file').' AS b ON a.category_id = b.file_ref_id AND b.file_type = \'category\' WHERE a.category_id = '.(int)$element.' LIMIT 1';
+			$query = 'SELECT a.*,b.*,icon.file_id AS icon_file_id,icon.file_path AS icon_file_path FROM '.hikashop_table(end($this->tables)).' AS a LEFT JOIN '.hikashop_table('file').' AS b ON a.category_id = b.file_ref_id AND b.file_type = \'category\'  LEFT JOIN '.hikashop_table('file').' AS icon ON a.category_id = icon.file_ref_id AND icon.file_type = \'category_icon\'   WHERE a.category_id = '.(int)$element.' LIMIT 1';
 			$this->database->setQuery($query);
 			return $this->database->loadObject();
 		}
@@ -131,6 +155,7 @@ class hikashopCategoryClass extends hikashopClass {
 
 			$fileClass = hikashop_get('class.file');
 			$fileClass->storeFiles('category', $status);
+			$fileClass->storeFiles('category_icon', $status,'icon');
 		} else {
 			JRequest::setVar('fail', $element);
 		}
@@ -590,6 +615,25 @@ class hikashopCategoryClass extends hikashopClass {
 					$rows[$k]->file_name = $row->category_name;
 				}
 			}
+
+			$this->database->setQuery('SELECT * FROM '.hikashop_table('file').' WHERE file_type=\'category_icon\' AND file_ref_id IN ('.implode(',',$ids).')');
+			$images = $this->database->loadObjectList();
+
+			foreach($rows as $k => $cat){
+				if(!empty($images)){
+					foreach($images as $img){
+						if($img->file_ref_id==$cat->category_id){
+							foreach(get_object_vars($img) as $key => $val){
+								$rows[$k]->{'icon_'.$key} = $val;
+							}
+							break;
+						}
+					}
+				}
+				if(!isset($rows[$k]->file_name)){
+					$rows[$k]->file_name = $row->category_name;
+				}
+			}
 		}
 		return $rows;
 	}
@@ -820,7 +864,7 @@ class hikashopCategoryClass extends hikashopClass {
 			$category_types[] = $db->Quote($t);
 		}
 
-		$select = array('c.*');
+		$select = array('c.*,CONCAT(c.category_name,"(<span class=\"total\">",COUNT(product_category.product_id),"</span>)(<span class=\"sub_total\"></span>)") AS category_name');
 		$table = array(hikashop_table('category').' AS c');
 		$where = array('c.category_type IN ('.implode(',', $category_types).')');
 
@@ -841,13 +885,13 @@ class hikashopCategoryClass extends hikashopClass {
 			$table[] = 'INNER JOIN '.hikashop_table('category').' AS cp On cp.category_id = ' . $start;
 			$where[] = '(c.category_left >= cp.category_left AND c.category_right <= cp.category_right)';
 		}
-
+		$table[] = ' LEFT JOIN '.hikashop_table('product_category').' AS product_category ON product_category.category_id=c.category_id ';
 		if($typeConfig['mode'] == 'list')
 			$order = ' ORDER BY c.category_name ASC';
 		else
 			$order = ' ORDER BY c.category_parent_id ASC, c.category_ordering';
 
-		$query = 'SELECT '.implode(', ', $select) . ' FROM ' . implode(' ', $table) . ' WHERE ' . implode(' AND ', $where).$order;
+		$query = 'SELECT '.implode(', ', $select) . ' FROM ' . implode(' ', $table) . ' WHERE ' . implode(' AND ', $where).' GROUP BY c.category_id '.$order;
 		$db->setQuery($query, $page, $limit);
 
 		if(!$app->isAdmin() && $multiTranslation && class_exists('JFalangDatabase')) {

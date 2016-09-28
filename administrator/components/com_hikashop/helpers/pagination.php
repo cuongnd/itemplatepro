@@ -135,7 +135,7 @@ class hikashopBridgePaginationHelper extends JPagination {
 	}
 
 	function _list_footer($list) {
-		$html = '<div class="list-footer">'."\n";
+		$html = '<div class="list-footer pagination">'."\n";
 		if(HIKASHOP_J16) {
 			$display = JText::_('JGLOBAL_DISPLAY_NUM');
 		} else {
@@ -173,8 +173,8 @@ class hikashopBridgePaginationHelper extends JPagination {
 				}
 				if(strpos($ret, 'name="limitstart'.$this->hikaSuffix.'"') === false)
 					$ret .= "<input type=\"hidden\" name=\"limitstart".$this->hikaSuffix."\" value=\"".$list['limitstart']."\" />";
-				if(strpos($ret, 'class="list-footer"') === false) {
-					$ret = '<div class="list-footer">'."\n".$ret."\n</div>";
+				if(strpos($ret, 'class="list-footer pagination"') === false) {
+					$ret = '<div class="list-footer pagination">'."\n".$ret."\n</div>";
 				}
 				return $ret;
 			}

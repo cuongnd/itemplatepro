@@ -182,6 +182,7 @@ class ToggleController extends HikashopBridgeController {
 		$db	= JFactory::getDBO();
 		$db->setQuery('DELETE FROM '.hikashop_table($table).' WHERE '.$key1.' = '.$db->Quote($value1).' AND '.$key2.' = '.$db->Quote($value2));
 		$db->query();
+		//echo 'DELETE FROM '.hikashop_table($table).' WHERE '.$key1.' = '.$db->Quote($value1).' AND '.$key2.' = '.$db->Quote($value2);
 		exit;
 	}
 

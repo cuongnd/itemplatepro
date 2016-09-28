@@ -128,9 +128,9 @@ class hikashopCartHelper{
 						}else{
 							$doc = JFactory::getDocument();
 						}
-						$doc->addScriptDeclaration("<!--\n".$js."\n//-->\n");
+						$doc->addScriptDeclaration("\n".$js."\n");
 					}else{
-						echo '<script type="text/javascript">'."<!--\n".$js."\n//-->\n".'</script>';
+						echo '<script type="text/javascript">'."\n".$js."\n".'</script>';
 					}
 				}
 				if($this->override && function_exists('hikashop_quantity_render')) {
@@ -173,9 +173,9 @@ class hikashopCartHelper{
 					$setJS=$params->get('js');
 					if(!$setJS){
 						$doc = JFactory::getDocument();
-						$doc->addScriptDeclaration("\n<!--\n".$js."\n//-->\n");
+						$doc->addScriptDeclaration("\n".$js."\n");
 					}else{
-						echo '<script type="text/javascript">'."<!--\n".$js."\n//-->\n".'</script>';
+						echo '<script type="text/javascript">'."\n".$js."\n".'</script>';
 					}
 				}
 				$html = '<input id="hikashop_product_quantity_field_'.$i.'" type="text" value="'.JRequest::getInt('quantity',$min_quantity).'" class="hikashop_product_quantity_field" name="quantity" onchange="hikashopCheckQuantityChange(\'hikashop_product_quantity_field_'.$i.'\','.$max_quantity.','.$min_quantity.');" />'.$html;
@@ -424,7 +424,7 @@ class hikashopCartHelper{
 			}else{
 				$doc = JFactory::getDocument();
 			}
-			$doc->addScriptDeclaration("\n<!--\n".$js."\n//-->\n");
+			$doc->addScriptDeclaration("\n".$js."\n");
 			$first = !$needNotice;
 			return $js;
 		}

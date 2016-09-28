@@ -9,6 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?><?php
 class hikashopCurrencyClass extends hikashopClass{
+	public static $list_md5_query=array();
 	var $tables = array('currency');
 	var $pkeys = array('currency_id');
 	var $namekeys = array('');
@@ -161,12 +162,24 @@ class hikashopCurrencyClass extends hikashopClass{
 				$query = 'SELECT b.*,c.* FROM '.hikashop_table('category'). ' AS a '.
 						'LEFT JOIN '.hikashop_table('taxation').' AS b ON a.category_namekey=b.category_namekey '.
 						'LEFT JOIN '.hikashop_table('tax').' AS c ON b.tax_namekey=c.tax_namekey WHERE '.implode(' AND ',$filters).' ORDER BY b.taxation_id ASC';
-				$this->database->setQuery($query);
-				$taxPlans = $this->database->loadObjectList('taxation_id');
+				$md5_query=md5($query);
+				if(!isset(static::$list_md5_query[$md5_query]))
+				{
+					$this->database->setQuery($query);
+					static::$list_md5_query[$md5_query]=$this->database->loadObjectList('taxation_id');
+				}
+
+				$taxPlans = static::$list_md5_query[$md5_query];
+
 				if ( empty( $taxPlans)) {
 					$query = 'SELECT category_parent_id FROM '.hikashop_table('category').' WHERE category_id = '.(int)$tax_category_id;
-					$this->database->setQuery($query);
-					$category_parent_id = $this->database->loadResult();
+					$md5_query=md5($query);
+					if(!isset(static::$list_md5_query[$md5_query]))
+					{
+						$this->database->setQuery($query);
+						static::$list_md5_query[$md5_query] = $this->database->loadResult();
+					}
+					$category_parent_id = static::$list_md5_query[$md5_query];
 					if ( !empty( $category_parent_id)) {
 						$tax_category_id = $category_parent_id;
 					}

@@ -16,9 +16,38 @@ class CategoryViewCategory extends hikashopView
 	var $nameForm = 'HIKA_CATEGORIES';
 	var $icon = 'categories';
 	var $triggerView = true;
+	/**
+	 * The JForm object
+	 *
+	 * @var  JForm
+	 */
+	protected $form;
+
+	/**
+	 * The active item
+	 *
+	 * @var  object
+	 */
+	protected $item;
+
+	/**
+	 * The model state
+	 *
+	 * @var  object
+	 */
 
 	function display($tpl = null)
 	{
+
+		$user=JFactory::getUser();
+		$this->type='category';
+		require_once JPATH_ROOT.DS.'administrator/components/com_hikashop/models/category.php';
+		$model_category=JModelLegacy::getInstance('category','hikashopModel');
+
+		$this->setModel($model_category,'category');
+		$this->form  = $this->get('Form');
+		$this->item  = $this->get('Item');
+		$this->state = $this->get('State');
 		$this->paramBase = HIKASHOP_COMPONENT.'.'.$this->getName();
 		$function = $this->getLayout();
 		if(method_exists($this,$function)) $this->$function();
@@ -111,6 +140,7 @@ class CategoryViewCategory extends hikashopView
 		$this->assignRef('type',$type);
 
 		$rows = $class->loadAllWithTrans($pageInfo->filter->filter_id,$pageInfo->selectedType,$filters,$order,$pageInfo->limit->start,$pageInfo->limit->value,$category_image);
+
 		if(!empty($pageInfo->search)){
 			$rows = hikashop_search($pageInfo->search,$rows,'category_id');
 		}
@@ -133,6 +163,13 @@ class CategoryViewCategory extends hikashopView
 		$breadcrumbClass = hikashop_get('type.breadcrumb');
 		$breadCrumb = $breadcrumbClass->display('filter_id',$pageInfo->filter->filter_id,$type);
 		$this->assignRef('breadCrumb', $breadCrumb);
+		foreach($rows as $key=>$row){
+
+			if($row->category_type!='product' || $row->category_id=='' ||  $row->category_id==0)
+			{
+				unset($rows[$key]);
+			}
+		}
 		$this->assignRef('rows',$rows);
 		$this->assignRef('pageInfo',$pageInfo);
 		$order = new stdClass();
@@ -235,9 +272,11 @@ class CategoryViewCategory extends hikashopView
 		$this->assignRef('popup', $popup);
 
 		$category_id = hikashop_getCID('category_id');
+
 		$class = hikashop_get('class.category');
 		if(!empty($category_id)){
 			$element = $class->get($category_id,true);
+
 			$task='edit';
 		}else{
 			$element = JRequest::getVar('fail');
@@ -253,6 +292,7 @@ class CategoryViewCategory extends hikashopView
 			}
 			$task='add';
 		}
+
 		if(!empty($element->category_parent_id)){
 			$parentData = $class->get($element->category_parent_id);
 			$element->category_parent_name = $parentData->category_name;

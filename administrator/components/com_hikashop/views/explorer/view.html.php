@@ -23,7 +23,7 @@ class ExplorerViewExplorer extends hikashopView{
 		$doc->addStyleSheet(HIKASHOP_CSS.'dtree.css');
 		$database	= JFactory::getDBO();
 		$translationHelper = hikashop_get('helper.translation');
-		$select = 'SELECT a.*';
+		$select = 'SELECT a.*,CONCAT(a.category_name,"(",COUNT(product_category.product_id),")") AS category_name';
 		$table=' FROM '.hikashop_table('category').' AS a';
 		$app = JFactory::getApplication();
 		if($app->isAdmin() && $translationHelper->isMulti()){
@@ -42,14 +42,16 @@ class ExplorerViewExplorer extends hikashopView{
 				$trans_table = 'falang_content';
 			}
 			$table .=' LEFT JOIN '.hikashop_table($trans_table,false).' AS b ON a.category_id=b.reference_id AND b.reference_table=\'hikashop_category\' AND b.reference_field=\'category_name\' AND b.published=1 AND language_id='.$lgid;
+
 		}
+		$table .=' LEFT JOIN '.hikashop_table('product_category').' AS product_category ON product_category.category_id=a.category_id ';
 		$where='';
 		if(!empty($type)){
 			$where = ' WHERE a.category_type IN ('.$database->Quote($type).',\'root\')';
 			if($type == 'product')
 				$where = ' WHERE a.category_type NOT IN (\'status\', \'tax\')';
 		}
-		$database->setQuery($select.$table.$where.' ORDER BY a.category_parent_id ASC, a.category_ordering ASC');
+		$database->setQuery($select.$table.$where.'GROUP BY a.category_id ORDER BY a.category_parent_id ASC, a.category_ordering ASC');
 		$elements=$database->loadObjectList();
 		$this->assignRef('elements', $elements);
 		if(!is_numeric($defaultId)){

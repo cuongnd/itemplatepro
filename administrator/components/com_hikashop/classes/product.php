@@ -583,6 +583,11 @@ class hikashopProductClass extends hikashopClass{
 
 
 		if($status) {
+			if(!$product->product_id)
+			{
+				$user=JFactory::getUser();
+				$product->created_by=$user->id;
+			}
 			$status = $this->save($product);
 		} else {
 			JRequest::setVar('fail', $product);

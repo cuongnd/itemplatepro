@@ -3,7 +3,7 @@
 	<fields name="params" label="COM_MENUS_LINKTYPE_OPTIONS_LABEL"
 	>
 		<fieldset name="menu-options"
-			label="COM_MENUS_LINKTYPE_OPTIONS_LABEL"
+			label="COM_MENUS_LINKTYPE_OPTIONS_LABEL" addfieldpath="modules/mod_zt_tabs/admin/elements/"
 		>
 
 			<field name="menu-anchor_title" type="text"
@@ -17,6 +17,20 @@
 			<field name="menu_image" type="media"
 				label="COM_MENUS_ITEM_FIELD_MENU_IMAGE_LABEL"
 				description="COM_MENUS_ITEM_FIELD_MENU_IMAGE_DESC" />
+
+			<field name="menu_image_tip" type="media"
+				label="image tip"
+				description="image tip" />
+			<field addfieldpath="modules/mod_zt_tabs/admin/elements/" name="type" type="jvtype" default="moduleID" label="Type tabs:" description="Do you want to use the content code to display with tab">
+				<option value="">- Select type -</option>
+				<option value="moduleID">Modules</option>
+				<option value="categoryID">Contents</option>
+			</field>
+
+			<field name="moduleID-position" type="jvposition" default="left" label="Select a position" description="Select module position which will display in tabs" />
+			<field name="jv_selection" type="jvselection" default="" label="Select" description="Select">
+			</field>
+
 
 			<field name="menu_text" type="radio"
 				class="btn-group btn-group-yesno"

@@ -44,6 +44,16 @@ JDEBUG ? $_PROFILER->setStart($startTime, $startMem)->mark('afterLoad') : null;
 
 // Instantiate the application.
 $app = JFactory::getApplication('site');
-
+$doc=JFactory::getDocument();
+ob_start();
+?>
+<script type="text/javascript">
+	var root_ulr="<?php echo JUri::root() ?>";
+</script>
+<?php
+$js_content=ob_get_clean();
+$js_content=JUtility::remove_string_javascript($js_content);
+$doc->addScriptDeclaration($js_content);
+$doc->addScript(JUri::root().'templates/core.js');
 // Execute the application.
 $app->execute();

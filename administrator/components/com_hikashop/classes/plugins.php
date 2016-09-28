@@ -10,7 +10,9 @@ defined('_JEXEC') or die('Restricted access');
 ?><?php
 class hikashopPluginsClass extends hikashopClass {
 
-	function  __construct( $config = array() ) {
+	public static $list_md5_query;
+
+	function  __construct($config = array() ) {
 		if(!HIKASHOP_J16) {
 			$this->toggle = array('published'=>'id');
 			$this->pkeys = array('id');
@@ -118,8 +120,13 @@ class hikashopPluginsClass extends hikashopClass {
 		}else{
 			$query = 'SELECT * FROM '.hikashop_table('extensions',false).' WHERE folder='.$this->database->Quote($type).' AND element='.$this->database->Quote($name).' AND type=\'plugin\'';
 		}
-		$this->database->setQuery($query);
-		$result = $this->database->loadObject();
+		$md5_query=md5($query);
+		if(!isset(static::$list_md5_query[$md5_query]))
+		{
+			$this->database->setQuery($query);
+			static::$list_md5_query[$md5_query] =$this->database->loadObject();
+		}
+		$result = static::$list_md5_query[$md5_query];
 		$this->loadParams($result);
 		return $result;
 	}
