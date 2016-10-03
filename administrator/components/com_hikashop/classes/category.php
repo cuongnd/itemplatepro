@@ -28,12 +28,9 @@ class hikashopCategoryClass extends hikashopClass {
 		$query->clear()
 			->select('category.*')
 			->from('#__hikashop_category AS category')
-			->leftJoin('#__hikashop_file AS file_icon ON file_icon.file_ref_id=category.category_id')
-			->where('file_icon.file_type='.$query->q('category_icon'))
+			->leftJoin('#__hikashop_file AS file_icon ON file_icon.file_ref_id=category.category_id AND file_icon.file_type='.$query->q('category_icon'))
 			->select('GROUP_CONCAT(file_icon.file_path SEPARATOR  ";") AS list_icon')
-
-			->leftJoin('#__hikashop_file AS file_image ON file_image.file_ref_id=category.category_id')
-			->where('file_image.file_type='.$query->q('category'))
+			->leftJoin('#__hikashop_file AS file_image ON file_image.file_ref_id=category.category_id AND file_image.file_type='.$query->q('category'))
 			->select('GROUP_CONCAT(file_image.file_path SEPARATOR  ";") AS list_image')
 			->group('category.category_id')
 		;
