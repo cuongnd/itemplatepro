@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c655fd7a-704e-4f23-88ca-b67dfc210419" name="ftp.itemplatepro.com" url="http://ftp.itemplatepro.com">
+        <fileTransfer host="ftp.itemplatepro.com" port="21" rootFolder="/domains/itemplatepro.com/public_html" password="dfc6dff8dffadfd3dfd0dfc3dffddfc8dfd2dfe5" username="itemplatep">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
