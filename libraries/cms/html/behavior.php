@@ -356,7 +356,7 @@ abstract class JHtmlBehavior
 			static::framework(true);
 
 			// Load the JavaScript and css
-			JHtml::_('script', 'system/modal.js', true, true);
+			JHtml::_('script', 'system/modal-uncompressed.js', true, true);
 			JHtml::_('stylesheet', 'system/modal.css', array(), true);
 		}
 

@@ -95,9 +95,12 @@
             }
             $list_product.find('>.slide.item').remove();
             var first_list_item=plugin.settings.list_item[0];
-            for(var i=0;i<first_list_item.length;i++){
-                var item=first_list_item[i];
-                $(item).appendTo($list_product);
+            if(typeof first_list_item!="undefined" && first_list_item.length>0)
+            {
+                for(var i=0;i<first_list_item.length;i++){
+                    var item=first_list_item[i];
+                    $(item).appendTo($list_product);
+                }
             }
             plugin.current_page=0;
 

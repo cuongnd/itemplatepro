@@ -2,24 +2,37 @@
 /**
  * Kunena Component
  *
- * @package       Kunena.Administrator
- * @subpackage    Controllers
+ * @package     Kunena.Administrator
+ * @subpackage  Controllers
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 /**
  * Kunena Cpanel Controller
  *
- * @since 2.0
+ * @since  2.0
  */
 class KunenaAdminControllerClose extends KunenaController
 {
+	/**
+	 *
+	 * @since    2.0.0-BETA2
+	 * @var null|string
+	 */
 	protected $baseurl = null;
 
+	/**
+	 * Construct
+	 *
+	 * @param   array  $config  config
+	 *
+	 * @since    2.0.0-BETA2
+	 *
+	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);

@@ -47,7 +47,7 @@ $get_tree_ul_li = function ($function_call_back, $root_id = 1, &$tree_ul_li, $li
 	$menu_item = $list_all_menu[$root_id];
 	if ($menu_item) {
 		$menu_image=$menu_item->params->get('menu_image','');
-		$tree_ul_li .= '<li class="menu-iem menu-iem-'.$menu_item->id.' level-'.$level.'" ><a data-menu_id="'.$menu_item->id.'"  href="' . $menu_item->link.'&Itemid='.$menu_item->id . '">'.($menu_image?'<img class="icon icon-'.$menu_image->id.'" src="'.JUri::root().$menu_image.'">':'').'<span class="title">' . $menu_item->title . '</span></a>';
+		$tree_ul_li .= '<li class="menu-iem menu-iem-'.$menu_item->id.' level-'.$level.'" ><a data-menu_id="'.$menu_item->id.'"  href="' . $menu_item->flink . '">'.($menu_image?'<img class="icon icon-'.$menu_image->id.'" src="'.JUri::root().$menu_image.'">':'').'<span class="title">' . $menu_item->title . '</span></a>';
 		$tree_ul_li .= count($list_tree_menu[$root_id]) ? '<ul class="level-'.$level.'">' : '';
 	}
 	foreach ($list_tree_menu[$root_id] as $a_menu_item) {

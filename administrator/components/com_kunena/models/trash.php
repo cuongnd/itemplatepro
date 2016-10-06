@@ -2,21 +2,21 @@
 /**
  * Kunena Component
  *
- * @package       Kunena.Administrator
- * @subpackage    Models
+ * @package     Kunena.Administrator
+ * @subpackage  Models
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
 
 /**
  * Trash Model for Kunena
  *
- * @since 2.0
+ * @since  2.0
  */
 class KunenaAdminModelTrash extends KunenaModel
 {
@@ -48,7 +48,7 @@ class KunenaAdminModelTrash extends KunenaModel
 		}
 
 		// List state information
-		$value = $this->getUserStateFromRequest("com_kunena.admin.trash.list.limit", 'limit', $this->app->getCfg('list_limit'), 'int');
+		$value = $this->getUserStateFromRequest("com_kunena.admin.trash.list.limit", 'limit', $this->app->get('list_limit'), 'int');
 		$this->setState('list.limit', $value);
 
 		$value = $this->getUserStateFromRequest("com_kunena.admin.trash.list.start", 'limitstart', 0, 'int');
@@ -95,7 +95,7 @@ class KunenaAdminModelTrash extends KunenaModel
 	/**
 	 * Method to get all deleted messages or topics in function of user selection.
 	 *
-	 * @return    Array
+	 * @return    array
 	 * @since    1.6
 	 */
 	public function getTrashItems()
@@ -113,7 +113,7 @@ class KunenaAdminModelTrash extends KunenaModel
 	/**
 	 * Method to get all deleted messages.
 	 *
-	 * @return    Array
+	 * @return    array
 	 * @since    1.6
 	 */
 	protected function _getMessages()
@@ -227,10 +227,20 @@ class KunenaAdminModelTrash extends KunenaModel
 		$cquery = clone $query;
 		$cquery->clear('select')->clear('order')->select('COUNT(*)');
 		$db->setQuery($cquery);
-		$total = (int) $db->loadResult();
-		$this->setState('list.total', $total);
+		
+		try
+		{
+			$total = (int) $db->loadResult();
+			$this->setState('list.total', $total);
+		}
+		catch (JDatabaseExceptionExecuting $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return array();
+		}
 
-		if (KunenaError::checkDatabaseError() || !$total)
+		if (!$total)
 		{
 			return array();
 		}
@@ -250,7 +260,8 @@ class KunenaAdminModelTrash extends KunenaModel
 	/**
 	 * Method to get all deleted topics.
 	 *
-	 * @return    Array
+	 * @return    array
+	 *
 	 * @since    1.6
 	 */
 	protected function _getTopics()
@@ -342,11 +353,21 @@ class KunenaAdminModelTrash extends KunenaModel
 
 		$cquery = clone $query;
 		$cquery->clear('select')->clear('order')->select('COUNT(*)');
-		$db->setQuery($cquery);
-		$total = (int) $db->loadResult();
-		$this->setState('list.total', $total);
+		$db->setQuery($cquery);	
 
-		if (KunenaError::checkDatabaseError() || !$total)
+		try
+		{
+			$total = (int) $db->loadResult();
+			$this->setState('list.total', $total);
+		}
+		catch (JDatabaseExceptionExecuting $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return array();
+		}
+
+		if (!$total)
 		{
 			return array();
 		}
@@ -366,7 +387,8 @@ class KunenaAdminModelTrash extends KunenaModel
 	/**
 	 * Method to get select options to choose between topics and messages.
 	 *
-	 * @return    Array
+	 * @return    array
+	 *
 	 * @since    1.6
 	 */
 	public function getViewOptions()
@@ -381,7 +403,8 @@ class KunenaAdminModelTrash extends KunenaModel
 	/**
 	 * Method to get details on selected items.
 	 *
-	 * @return    Array
+	 * @return    array
+	 *
 	 * @since    1.6
 	 */
 	public function getPurgeItems()
@@ -407,6 +430,7 @@ class KunenaAdminModelTrash extends KunenaModel
 	 * Method to hash datas.
 	 *
 	 * @return    string Hashed value.
+	 *
 	 * @since    1.6
 	 */
 	public function getMd5()
@@ -416,10 +440,14 @@ class KunenaAdminModelTrash extends KunenaModel
 		return md5(serialize($ids));
 	}
 
+	/**
+	 * @return JPagination
+	 *
+	 */
 	public function getNavigation()
 	{
 		jimport('joomla.html.pagination');
-		$navigation = new JPagination ($this->getState('list.total'), $this->getState('list.start'), $this->getState('list.limit'));
+		$navigation = new JPagination($this->getState('list.total'), $this->getState('list.start'), $this->getState('list.limit'));
 
 		return $navigation;
 	}

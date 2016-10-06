@@ -2,21 +2,21 @@
 /**
  * Kunena Component
  *
- * @package       Kunena.Administrator
- * @subpackage    Models
+ * @package     Kunena.Administrator
+ * @subpackage  Models
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 jimport('joomla.application.component.modellist');
 
 /**
  * Rank Model for Kunena
  *
- * @since 3.0
+ * @since  3.0
  */
 class KunenaAdminModelRank extends KunenaModel
 {
@@ -43,6 +43,11 @@ class KunenaAdminModelRank extends KunenaModel
 		$this->setState('item.id', $value);
 	}
 
+	/**
+	 * @return mixed|null
+	 *
+	 * @throws Exception
+	 */
 	public function getRank()
 	{
 		$db = JFactory::getDBO();
@@ -52,11 +57,16 @@ class KunenaAdminModelRank extends KunenaModel
 		if ($id)
 		{
 			$db->setQuery("SELECT * FROM #__kunena_ranks WHERE rank_id={$db->quote($id)}");
-			$selected = $db->loadObject();
-
-			if (KunenaError::checkDatabaseError())
+			
+			try
 			{
-				return null;
+				$selected = $db->loadObject();
+			}
+			catch (RuntimeException $e)
+			{
+				JFactory::getApplication()->enqueueMessage($e->getMessage());
+					
+				return;
 			}
 
 			return $selected;
@@ -65,6 +75,10 @@ class KunenaAdminModelRank extends KunenaModel
 		return null;
 	}
 
+	/**
+	 * @return mixed
+	 *
+	 */
 	public function getRankspaths()
 	{
 		$template = KunenaFactory::getTemplate();

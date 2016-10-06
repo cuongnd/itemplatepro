@@ -53,9 +53,7 @@ class mod_tab_products
         foreach ($categories as $cat_id) {
             $tree_data = array();
             $get_tree_data($get_tree_data, $cat_id, $tree_data, $list_tree_category, 0);
-            foreach ($tree_data as $a_cat_id) {
-                $list_return_category[$cat_id]->list_sub_category_detail[] = $list_all_category[$a_cat_id];
-            }
+            $list_return_category[$cat_id]->list_sub_category_detail = $list_tree_category[$cat_id];
             array_unshift($tree_data, $cat_id);
             $list_all_category_id = array_merge($list_all_category_id, $tree_data);
             $list_return_category[$cat_id]->list_category = $tree_data;

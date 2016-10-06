@@ -2,14 +2,14 @@
 /**
  * Kunena Plugin
  *
- * @package       Kunena.Plugins
- * @subpackage    Comprofiler
+ * @package     Kunena.Plugins
+ * @subpackage  Comprofiler
  *
- * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 require_once dirname(__FILE__) . '/integration.php';
 
@@ -19,10 +19,18 @@ require_once dirname(__FILE__) . '/integration.php';
 class KunenaAccessComprofiler
 {
 	protected $categories = false;
+
 	protected $groups = false;
+
 	protected $tree = array();
+
 	protected $params = null;
 
+	/**
+	 * KunenaAccessComprofiler constructor.
+	 *
+	 * @param $params
+	 */
 	public function __construct($params)
 	{
 		$this->params = $params;
@@ -39,14 +47,18 @@ class KunenaAccessComprofiler
 	{
 		static $accesstypes = array('communitybuilder');
 
+		$params = array('accesstypes' => &$accesstypes);
+
+		KunenaIntegrationComprofiler::trigger('getAccessTypes', $params);
+
 		return $accesstypes;
 	}
 
 	/**
 	 * Get group name in selected access type.
 	 *
-	 * @param string $accesstype Access type.
-	 * @param int    $id         Group id.
+	 * @param   string $accesstype Access type.
+	 * @param   int    $id         Group id.
 	 *
 	 * @return string|null
 	 */
@@ -55,6 +67,7 @@ class KunenaAccessComprofiler
 		if ($accesstype == 'communitybuilder')
 		{
 			$this->loadGroups();
+
 			if ($id !== null)
 			{
 				return isset($this->groups[$id]) ? $this->groups[$id]->name : $id;
@@ -63,34 +76,43 @@ class KunenaAccessComprofiler
 			return $this->groups;
 		}
 
-		return null;
+		$name   = null;
+		$params = array('accesstype' => $accesstype, 'id' => $id, 'name' => &$name);
+
+		KunenaIntegrationComprofiler::trigger('getGroupName', $params);
+
+		return $name;
 	}
 
 	/**
 	 * Get HTML list of the available groups
 	 *
-	 * @param string $accesstype Access type.
-	 * @param int    $category   Group id.
+	 * @param   string $accesstype Access type.
+	 * @param   int    $category   Group id.
 	 *
 	 * @return array
 	 */
 	public function getAccessOptions($accesstype, $category)
 	{
 		$html = array();
+
 		if (!$accesstype || $accesstype == 'communitybuilder')
 		{
 			$this->loadCategories();
 			$this->loadGroups();
 			$options  = array();
 			$selected = 'communitybuilder' == $category->accesstype && isset($this->groups[$category->access]) ? $category->access : null;
+
 			foreach ($this->tree as $item)
 			{
 				if (!$selected && is_numeric($item->id))
 				{
 					$selected = $item->id;
 				}
+
 				$options[] = JHtml::_('select.option', $item->id, str_repeat('- ', $item->level) . $item->name, 'value', 'text', !is_numeric($item->id));
 			}
+
 			if (!$options)
 			{
 				$selected  = 0;
@@ -104,6 +126,10 @@ class KunenaAccessComprofiler
 			);
 		}
 
+		$params = array('accesstype' => $accesstype, 'category' => $category, 'html' => &$html);
+
+		KunenaIntegrationComprofiler::trigger('getAccessOptions', $params);
+
 		return $html;
 	}
 
@@ -115,9 +141,9 @@ class KunenaAccessComprofiler
 	 *
 	 * Results may be cached.
 	 *
-	 * @param array $categories List of categories, null = all.
+	 * @param   array $categories List of categories, null = all.
 	 *
-	 * @return array(array('user_id'=>u, 'category_id'=>c, 'role'=>r))
+	 * @return array(array => u, 'category_id'=>c, 'role'=>r))
 	 */
 	public function loadCategoryRoles(array $categories = null)
 	{
@@ -129,6 +155,26 @@ class KunenaAccessComprofiler
 	}
 
 	/**
+	 * Authorise user actions in a category.
+	 *
+	 * Function returns a list of authorised actions. Missing actions are threaded as inherit.
+	 *
+	 * @param KunenaForumCategory $category
+	 * @param int                 $userid
+	 *
+	 * @return array
+	 */
+	public function getAuthoriseActions( KunenaForumCategory $category, $userid )
+	{
+		$actions = array();
+		$params  = array('category' => $category, 'userid' => $userid, 'actions' => &$actions);
+
+		KunenaIntegrationComprofiler::trigger('getAuthoriseActions', $params);
+
+		return $actions;
+	}
+
+	/**
 	 * Authorise list of categories.
 	 *
 	 * Function accepts array of id indexed KunenaForumCategory objects and removes unauthorised
@@ -136,8 +182,8 @@ class KunenaAccessComprofiler
 	 *
 	 * Results for the current user are saved into session.
 	 *
-	 * @param int   $userid     User who needs the authorisation (null=current user, 0=visitor).
-	 * @param array $categories List of categories in access type.
+	 * @param   int   $userid     User who needs the authorisation (null=current user, 0=visitor).
+	 * @param   array $categories List of categories in access type.
 	 *
 	 * @return array, where category ids are in the keys.
 	 */
@@ -151,8 +197,12 @@ class KunenaAccessComprofiler
 		{
 			$allowed = explode(',', $allowed);
 		}
+
 		$allowed = (array) array_flip($allowed);
-		foreach ($allowed as $id => &$value) $value = $id;
+		foreach ($allowed as $id => &$value)
+		{
+			$value = $id;
+		}
 
 		return $allowed;
 	}
@@ -160,8 +210,8 @@ class KunenaAccessComprofiler
 	/**
 	 * Authorise list of userids to topic or category.
 	 *
-	 * @param    mixed $topic   Category or topic.
-	 * @param    array $userids list(allow, deny).
+	 * @param   mixed $topic   Category or topic.
+	 * @param   array $userids list(allow, deny).
 	 *
 	 * @return array
 	 */
@@ -173,17 +223,18 @@ class KunenaAccessComprofiler
 		{
 			return array($allow, $deny);
 		}
-		$category = $topic->getCategory();
 
-		if ($category->accesstype == 'communitybuilder')
-		{
-			$params = array('category' => $category, 'topic' => $topic, 'userids' => $userids, 'allow' => &$allow, 'deny' => &$deny);
-			KunenaIntegrationComprofiler::trigger('authoriseUsers', $params);
-		}
+		$category = $topic->getCategory();
+		$params   = array('category' => $category, 'topic' => $topic, 'userids' => $userids, 'allow' => &$allow, 'deny' => &$deny);
+
+		KunenaIntegrationComprofiler::trigger('authoriseUsers', $params);
 
 		return array($allow, $deny);
 	}
 
+	/**
+	 *
+	 */
 	protected function loadCategories()
 	{
 		if ($this->categories === false)
@@ -192,6 +243,7 @@ class KunenaAccessComprofiler
 			$params           = array('categories' => &$this->categories, 'groups' => $this->groups);
 			KunenaIntegrationComprofiler::trigger('loadCategories', $params);
 			$this->tree = new KunenaTree($this->categories);
+
 			if ($this->groups !== false)
 			{
 				$this->tree->add($this->groups);
@@ -199,6 +251,9 @@ class KunenaAccessComprofiler
 		}
 	}
 
+	/**
+	 *
+	 */
 	protected function loadGroups()
 	{
 		if ($this->groups === false)
@@ -206,6 +261,7 @@ class KunenaAccessComprofiler
 			$this->groups = array();
 			$params       = array('groups' => &$this->groups, 'categories' => $this->categories);
 			KunenaIntegrationComprofiler::trigger('loadGroups', $params);
+
 			if ($this->categories !== false)
 			{
 				$this->tree->add($this->groups);

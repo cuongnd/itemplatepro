@@ -2,14 +2,14 @@
 /**
  * Kunena Plugin
  *
- * @package       Kunena.Plugins
- * @subpackage    Kunena
+ * @package     Kunena.Plugins
+ * @subpackage  Kunena
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 class KunenaProfileKunena extends KunenaProfile
 {
@@ -24,10 +24,10 @@ class KunenaProfileKunena extends KunenaProfile
 	}
 
 	/**
-	 * @param string $action
-	 * @param bool   $xhtml
+	 * @param   string $action
+	 * @param   bool   $xhtml
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public function getUserListURL($action = '', $xhtml = true)
 	{
@@ -44,10 +44,10 @@ class KunenaProfileKunena extends KunenaProfile
 
 	/**
 	 * @param        $user
-	 * @param string $task
-	 * @param bool   $xhtml
+	 * @param   string $task
+	 * @param   bool   $xhtml
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public function getProfileURL($user, $task = '', $xhtml = true)
 	{
@@ -91,7 +91,7 @@ class KunenaProfileKunena extends KunenaProfile
 	}
 
 	/**
-	 * @param int $limit
+	 * @param   int $limit
 	 *
 	 * @return array
 	 */
@@ -104,8 +104,15 @@ class KunenaProfileKunena extends KunenaProfile
 			WHERE ku.uhits>0
 			ORDER BY ku.uhits DESC";
 		$db->setQuery($query, 0, $limit);
-		$top = (array) $db->loadObjectList();
-		KunenaError::checkDatabaseError();
+		
+		try
+		{
+			$top = (array) $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			KunenaError::displayDatabaseError($e);
+		}
 
 		return $top;
 	}
@@ -120,9 +127,9 @@ class KunenaProfileKunena extends KunenaProfile
 
 	/**
 	 * @param      $userid
-	 * @param bool $xhtml
+	 * @param   bool $xhtml
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public function getEditProfileURL($userid, $xhtml = true)
 	{

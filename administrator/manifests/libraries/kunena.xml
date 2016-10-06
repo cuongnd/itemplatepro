@@ -3,9 +3,9 @@
 <extension type="library" version="2.5" method="upgrade">
 	<name>Kunena Framework</name>
 	<libraryname>kunena</libraryname>
-	<version>4.0.11</version>
-	<versionname>Barcelona</versionname>
-	<creationDate>2016-06-05</creationDate>
+	<version>5.0.2</version>
+	<versionname>Conure</versionname>
+	<creationDate>2016-10-01</creationDate>
 	<author>Kunena Team</author>
 	<authorEmail>kunena@kunena.org</authorEmail>
 	<authorUrl>https://www.kunena.org</authorUrl>
@@ -29,10 +29,11 @@
 		<folder>form</folder>
 		<folder>forum</folder>
 		<folder>html</folder>
+		<folder>icons</folder>
 		<folder>image</folder>
 		<folder>integration</folder>
-		<folder>keyword</folder>
 		<folder>layout</folder>
+		<folder>log</folder>
 		<folder>menu</folder>
 		<folder>module</folder>
 		<folder>pagination</folder>
@@ -40,7 +41,6 @@
 		<folder>response</folder>
 		<folder>request</folder>
 		<folder>route</folder>
-		<folder>spam</folder>
 		<folder>table</folder>
 		<folder>tables</folder>
 		<folder>template</folder>

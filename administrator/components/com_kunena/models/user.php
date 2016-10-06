@@ -2,25 +2,24 @@
 /**
  * Kunena Component
  *
- * @package       Kunena.Administrator
- * @subpackage    Models
+ * @package     Kunena.Administrator
+ * @subpackage  Models
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
 
 /**
  * User Model for Kunena
  *
- * @since 3.0
+ * @since  3.0
  */
 class KunenaAdminModelUser extends KunenaModel
 {
-
 	/**
 	 * Method to auto-populate the model state.
 	 */
@@ -43,6 +42,11 @@ class KunenaAdminModelUser extends KunenaModel
 		$this->setState($this->getName() . '.id', $value);
 	}
 
+	/**
+	 * @return KunenaUser
+	 *
+	 * @throws Exception
+	 */
 	public function getUser()
 	{
 		$userid = $this->getState($this->getName() . '.id');
@@ -52,17 +56,27 @@ class KunenaAdminModelUser extends KunenaModel
 		return $user;
 	}
 
+	/**
+	 * @return array|KunenaForumTopic[]
+	 *
+	 * @throws Exception
+	 */
 	public function getSubscriptions()
 	{
 		$db     = JFactory::getDBO();
 		$userid = $this->getState($this->getName() . '.id');
 
 		$db->setQuery("SELECT topic_id AS thread FROM #__kunena_user_topics WHERE user_id='$userid' AND subscribed=1");
-		$subslist = (array) $db->loadObjectList();
-
-		if (KunenaError::checkDatabaseError())
+		
+		try
 		{
-			return array();
+			$subslist = (array) $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return;
 		}
 
 		$topic_list = array();
@@ -80,9 +94,13 @@ class KunenaAdminModelUser extends KunenaModel
 		return $topic_list;
 	}
 
+	/**
+	 * @return KunenaForumCategory[]
+	 *
+	 * @throws Exception
+	 */
 	public function getCatsubcriptions()
 	{
-		$db     = JFactory::getDBO();
 		$userid = $this->getState($this->getName() . '.id');
 
 		$subscatslist = KunenaForumCategoryHelper::getSubscriptions($userid);
@@ -90,17 +108,27 @@ class KunenaAdminModelUser extends KunenaModel
 		return $subscatslist;
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @throws Exception
+	 */
 	public function getIPlist()
 	{
 		$db     = JFactory::getDBO();
 		$userid = $this->getState($this->getName() . '.id');
 
 		$db->setQuery("SELECT ip FROM #__kunena_messages WHERE userid='$userid' GROUP BY ip");
-		$iplist = implode("','", (array) $db->loadColumn());
-
-		if (KunenaError::checkDatabaseError())
+		
+		try
 		{
-			return array();
+			$iplist = implode("','", (array) $db->loadColumn());
+		}
+		catch (RuntimeException $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return;
 		}
 
 		$list = array();
@@ -109,11 +137,16 @@ class KunenaAdminModelUser extends KunenaModel
 		{
 			$iplist = "'{$iplist}'";
 			$db->setQuery("SELECT m.ip,m.userid,u.username,COUNT(*) as mescnt FROM #__kunena_messages AS m INNER JOIN #__users AS u ON m.userid=u.id WHERE m.ip IN ({$iplist}) GROUP BY m.userid,m.ip");
-			$list = (array) $db->loadObjectlist();
-
-			if (KunenaError::checkDatabaseError())
+			
+			try
 			{
-				return array();
+				$list = (array) $db->loadObjectlist();
+			}
+			catch (RuntimeException $e)
+			{
+				JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+				return;
 			}
 		}
 
@@ -127,6 +160,10 @@ class KunenaAdminModelUser extends KunenaModel
 		return $useripslist;
 	}
 
+	/**
+	 * @return mixed
+	 *
+	 */
 	public function getListmodcats()
 	{
 		$user = $this->getUser();
@@ -144,6 +181,7 @@ class KunenaAdminModelUser extends KunenaModel
 		{
 			$categoryList[] = JHtml::_('select.option', 0, JText::_('COM_KUNENA_GLOBAL_MODERATOR'));
 		}
+
 		$params  = array(
 			'sections' => false,
 			'action'   => 'read');
@@ -152,17 +190,26 @@ class KunenaAdminModelUser extends KunenaModel
 		return $modCats;
 	}
 
+	/**
+	 * @return array|mixed
+	 *
+	 */
 	public function getListuserranks()
 	{
 		$db   = JFactory::getDBO();
 		$user = $this->getUser();
 		//grab all special ranks
 		$db->setQuery("SELECT * FROM #__kunena_ranks WHERE rank_special = '1'");
-		$specialRanks = (array) $db->loadObjectList();
-
-		if (KunenaError::checkDatabaseError())
+		
+		try
 		{
-			return array();
+			$specialRanks = (array) $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return;
 		}
 
 		$yesnoRank [] = JHtml::_('select.option', '0', JText::_('COM_KUNENA_RANK_NO_ASSIGNED'));
@@ -178,11 +225,19 @@ class KunenaAdminModelUser extends KunenaModel
 		return $selectRank;
 	}
 
+	/**
+	 * @return mixed
+	 *
+	 */
 	public function getMovecatslist()
 	{
 		return JHtml::_('kunenaforum.categorylist', 'catid', 0, array(), array(), 'class="inputbox"', 'value', 'text');
 	}
 
+	/**
+	 * @return array|string
+	 *
+	 */
 	public function getMoveuser()
 	{
 		$db = JFactory::getDBO();
@@ -196,11 +251,16 @@ class KunenaAdminModelUser extends KunenaModel
 
 		$userids = implode(',', $userids);
 		$db->setQuery("SELECT id,username FROM #__users WHERE id IN(" . $userids . ")");
-		$userids = (array) $db->loadObjectList();
-
-		if (KunenaError::checkDatabaseError())
+		
+		try
 		{
-			return array();
+			$userids = (array) $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+				
+			return;
 		}
 
 		return $userids;

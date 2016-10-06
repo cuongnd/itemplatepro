@@ -127,7 +127,7 @@ class ModMenuHelper
 							$item->flink = 'index.php?Itemid=' . $item->id;
 							break;
 					}
-/*
+
 					if (strcasecmp(substr($item->flink, 0, 4), 'http') && (strpos($item->flink, 'index.php?') !== false))
 					{
 						$router_md5=md5($item->flink);
@@ -148,7 +148,7 @@ class ModMenuHelper
 						}
 
 						$item->flink = static::$list_route[$router_md5];
-					}*/
+					}
 
 					// We prevent the double encoding because for some reason the $item is shared for menu modules and we get double encoding
 					// when the cause of that is found the argument should be removed

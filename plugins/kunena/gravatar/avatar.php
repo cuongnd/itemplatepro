@@ -2,19 +2,24 @@
 /**
  * Kunena Plugin
  *
- * @package       Kunena.Plugins
- * @subpackage    Gravatar
+ * @package     Kunena.Plugins
+ * @subpackage  Gravatar
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 class KunenaAvatarGravatar extends KunenaAvatar
 {
 	protected $params = null;
 
+	/**
+	 * KunenaAvatarGravatar constructor.
+	 *
+	 * @param $params
+	 */
 	public function __construct($params)
 	{
 		$this->params = $params;
@@ -22,19 +27,26 @@ class KunenaAvatarGravatar extends KunenaAvatar
 	}
 
 	/**
-	 * @return bool
+	 * @return boolean
 	 */
 	public function getEditURL()
 	{
 		return KunenaRoute::_('index.php?option=com_kunena&view=user&layout=edit');
 	}
 
+	/**
+	 * @param $user
+	 * @param $sizex
+	 * @param $sizey
+	 *
+	 * @return string
+	 */
 	protected function _getURL($user, $sizex, $sizey)
 	{
 		$user     = KunenaFactory::getUser($user);
 		$gravatar = new KunenaGravatar($user->email);
 		$gravatar->setAvatarSize(min($sizex, $sizey));
-		$gravatar->setDefaultImage(false);
+		$gravatar->setDefaultImage($this->params->get("default_image", false));
 		$gravatar->setMaxRating('g');
 
 		return $gravatar->buildGravatarURL(true);

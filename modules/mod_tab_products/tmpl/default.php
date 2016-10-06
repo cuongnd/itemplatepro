@@ -80,7 +80,7 @@ $image=hikashop_get('helper.image');
                         <?php
                         $total_item_on_slide_screen = $params->get('total_item_on_slide_screen', 4);
                         $list_chunk_product = array_chunk($list_product, $total_item_on_slide_screen);
-                        $total_column_sub_category=7;
+                        $total_column_sub_category=12;
                         ?>
                         <div class="wrapper-content ">
                             <div class="wrapper-content-left pull-left" style="width: <?php echo count($list_sub_category_detail)>$total_column_sub_category?'90%':'100%' ?> ">

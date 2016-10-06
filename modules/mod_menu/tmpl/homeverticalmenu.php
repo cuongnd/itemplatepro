@@ -78,11 +78,11 @@ ob_start();
     <div class="noi_bat">
         <h5 class="title"><img class="image-menu-item" src="<?php echo JUri::root() ?>images/icon_category/adr-icon-campfire.png"><?php echo JText::_('Nổi bật') ?></h5>
         <ul>
-            <li><a href="#"><?php echo JText::_('Sản phẩm bán chạy') ?></a></li>
-            <li><a href="#"><?php echo JText::_('Sản phẩm mới') ?></a></li>
-            <li><a href="#"><?php echo JText::_('Hàng giảm giá') ?></a></li>
-            <li><a href="#"><?php echo JText::_('Hàng đang đấu giá') ?></a></li>
-            <li><a href="#"><?php echo JText::_('Hàng đang có mua chung') ?></a></li>
+            <li><a href="#"><?php echo JText::_('best sale product') ?></a></li>
+            <li><a href="#"><?php echo JText::_('News product') ?></a></li>
+            <li><a href="#"><?php echo JText::_('Discount product') ?></a></li>
+            <li><a href="#"><?php echo JText::_('caution product') ?></a></li>
+            <li><a href="#"><?php echo JText::_('group buy product') ?></a></li>
         </ul>
     </div>
 </div>
@@ -105,7 +105,7 @@ ob_start();
 </div>
 <?php
 $html2=ob_get_clean();
-echo '<div class="mod_menu homeverticalmenu" id="mod_menu_'.$module->id.'">'.$tree_ul_li.$html1.$html12.'</div>';
+echo '<div class="mod_menu homehorizontalmenu" id="mod_menu_'.$module->id.'">'.$tree_ul_li.$html1.$html12.'</div>';
 $js_content = '';
 $doc = JFactory::getDocument();
 $uri=JFactory::getUri();

@@ -25,11 +25,10 @@ $image=hikashop_get('helper.image');
         <!-- Tab Navigation Menu -->
         <ul>
 
-            <li><a><?php echo JText::_('Tìm kiếm sản phẩm') ?></a></li>
-            <li><a><?php echo JText::_('Tk giảm giá') ?></a></li>
-            <li><a><?php echo JText::_('Tk gian hàng') ?></a></li>
-            <li><a><?php echo JText::_('Tk rao vặt') ?></a></li>
-            <li><a><?php echo JText::_('Tk hỏi đáp') ?></a></li>
+            <li><a><?php echo JText::_('Product search') ?></a></li>
+            <li><a><?php echo JText::_('Discount search') ?></a></li>
+            <li><a><?php echo JText::_('Vendor search') ?></a></li>
+            <li><a><?php echo JText::_('Question/asser search') ?></a></li>
 
         </ul>
         <!-- Content container -->
@@ -43,7 +42,7 @@ $image=hikashop_get('helper.image');
                             <div class="input-group-btn" >
                                 <div class="btn-group">
                                     <button class="btn btn-default search-by-group-product"  type="button">
-                                        <span data-bind="label" id="searchLabel"><?php echo JText::_('Tìm theo nhóm') ?></span> <span class="caret"></span>
+                                        <span data-bind="label" id="searchLabel"><?php echo JText::_('Seach by group') ?></span> <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu list-group-product">
                                         <li><a href="#">1</a></li>
@@ -55,18 +54,13 @@ $image=hikashop_get('helper.image');
                             <input type="search" name="keyword" id="searchBy" class="form-control" />
                             <span class="input-group-btn">
                                 <button id="filter" type="submit" class="btn  btn-primary search" >
-                                    <?php echo JText::_('Tìm kiếm') ?>
+                                    <?php echo JText::_('Seach') ?>
                                 </button>
                             </span>
                         </div>
                     </div>
                     <input type="hidden" name="task" value="search">
                 </form>
-            </div>
-
-            <!-- Features -->
-            <div>
-
             </div>
 
             <!-- Docs -->

@@ -1,10 +1,10 @@
 /**
  * Kunena Component
- * @package Kunena.Template.Blue_Eagle
+ * @package Kunena.Media
  *
  * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.kunena.org
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link      http://www.kunena.org
  **/
 
 /* Javascript file for debugging Mootools conflicts */
@@ -37,6 +37,6 @@ window.onload=function(){
 	// MooTools domready event not fired
 	if (kmt_domready != true) {
 		alert('Kunena: MooTools domready event was never fired!');
-		return;
+
 	}
 };

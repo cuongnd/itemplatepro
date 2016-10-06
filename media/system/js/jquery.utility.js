@@ -174,7 +174,7 @@
                 width: '100%',
                 height: '100%',
                 opacity: 0.7,
-                background:'#fff'
+                background: '#fff'
 
             });
             $wrapper_loading.find('img.bho88loading').css({
@@ -227,6 +227,47 @@
             }
         }
         $elements.height(height);
+
+    };
+    $.auto_sort_element_by_height = function ($elements,$parent_element) {
+        var height = 0;
+        var parent_element_height = $parent_element.height();
+        var list_element = [];
+        var total_height=0;
+        var min_height=0;
+        for (var i = 0; i < $elements.length; i++) {
+            var $element = $elements.eq(i);
+            var element_height = $element.height();
+            total_height+=element_height;
+            if (min_height > element_height) {
+                min_height = element_height;
+            }
+            list_element.push(
+                {
+                    element: $element,
+                    height: element_height
+                }
+            );
+        }
+        list_element.sort(function(a, b){
+            var keyA = a.height,
+                keyB = b.height;
+            // Compare the 2 dates
+            if(keyA < keyB) return 1;
+            if(keyA > keyB) return -1;
+            return 0;
+        });
+        var $temp=$('<div class="temp"></div>');
+        $temp.appendTo($parent_element);
+        for (var i = 0; i < list_element.length; i++) {
+            var $item=list_element[i].element;
+            $item.appendTo($temp);
+        }
+        var $first_child= $temp.children().first();
+        $first_child.unwrap();
+
+
+
 
     };
     $.get_year_old_by_date = function (dateString) {

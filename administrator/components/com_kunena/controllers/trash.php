@@ -2,31 +2,47 @@
 /**
  * Kunena Component
  *
- * @package       Kunena.Administrator
- * @subpackage    Controllers
+ * @package     Kunena.Administrator
+ * @subpackage  Controllers
  *
- * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 /**
  * Kunena Trash Controller
  *
- * @since 2.0
+ * @since  2.0
  */
 class KunenaAdminControllerTrash extends KunenaController
 {
 	protected $baseurl = null;
 
+	/**
+	 * Construct
+	 *
+	 * @param   array  $config  config
+	 *
+	 * @since    2.0
+	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
 		$this->baseurl = 'administrator/index.php?option=com_kunena&view=trash';
 	}
 
-	function purge()
+	/**
+	 * Purge
+	 *
+	 * @throws Exception
+	 *
+	 * @return void
+	 *
+	 * @since    2.0
+	 */
+	public function purge()
 	{
 		if (!JSession::checkToken('post'))
 		{
@@ -36,27 +52,28 @@ class KunenaAdminControllerTrash extends KunenaController
 			return;
 		}
 
-		$cid = JRequest::getVar('cid', array(), 'post', 'array'); // Array of integers
-		JArrayHelper::toInteger($cid);
+		$cid = JFactory::getApplication()->input->get('cid', array(), 'post', 'array');
+		Joomla\Utilities\ArrayHelper::toInteger($cid);
 
-		$type = JRequest::getCmd('type', 'topics', 'post');
-		$md5  = JRequest::getString('md5', null);
+		$type = JFactory::getApplication()->input->getCmd('type', 'topics', 'post');
+		$md5  = JFactory::getApplication()->input->getString('md5', null);
 
 		if (!empty($cid))
 		{
 			$this->app->setUserState('com_kunena.purge', $cid);
 			$this->app->setUserState('com_kunena.type', $type);
-
 		}
 		elseif ($md5)
 		{
 			$ids  = (array) $this->app->getUserState('com_kunena.purge');
 			$type = (string) $this->app->getUserState('com_kunena.type');
+
 			if ($md5 == md5(serialize($ids)))
 			{
 				if ($type == 'topics')
 				{
 					$topics = KunenaForumTopicHelper::getTopics($ids, 'none');
+
 					foreach ($topics as $topic)
 					{
 						$success = $topic->delete();
@@ -66,28 +83,52 @@ class KunenaAdminControllerTrash extends KunenaController
 							$this->app->enqueueMessage($topic->getError());
 						}
 					}
-					$this->app->enqueueMessage(JText::_('COM_KUNENA_TRASH_DELETE_TOPICS_DONE'));
+
+					if ($success)
+					{
+						$topic->totalrecount();
+						KunenaForumCategoryHelper::recount($topic->getCategory()->id);
+						$this->app->enqueueMessage(JText::_('COM_KUNENA_TRASH_DELETE_TOPICS_DONE'));
+					}
 				}
 				elseif ($type == 'messages')
 				{
 					$messages = KunenaForumMessageHelper::getMessages($ids, 'none');
+
 					foreach ($messages as $message)
 					{
 						$success = $message->delete();
+						$target = KunenaForumMessageHelper::get($message->id);
+						$topic  = KunenaForumTopicHelper::get($target->getTopic());
+
+						if ($topic->attachments > 0)
+						{
+							$topic->attachments = $topic->attachments - 1;
+							$topic->save(false);
+						}
+
 						if (!$success)
 						{
 							$this->app->enqueueMessage($message->getError());
 						}
 					}
-					$this->app->enqueueMessage(JText::_('COM_KUNENA_TRASH_DELETE_MESSAGES_DONE'));
+
+					if ($success)
+					{
+						$topic->totalrecount();
+						KunenaForumCategoryHelper::recount($topic->getCategory()->id);
+						$this->app->enqueueMessage(JText::_('COM_KUNENA_TRASH_DELETE_MESSAGES_DONE'));
+					}
 				}
 			}
 			else
 			{
 				// Error...
 			}
+
 			$this->app->setUserState('com_kunena.purge', null);
 			$this->app->setUserState('com_kunena.type', null);
+
 			if ($type == 'messages')
 			{
 				$this->setRedirect(KunenaRoute::_($this->baseurl . "&layout=messages", false));
@@ -98,7 +139,6 @@ class KunenaAdminControllerTrash extends KunenaController
 			}
 
 			return;
-
 		}
 		else
 		{
@@ -111,7 +151,16 @@ class KunenaAdminControllerTrash extends KunenaController
 		$this->setRedirect(KunenaRoute::_($this->baseurl . "&layout=purge", false));
 	}
 
-	function restore()
+	/**
+	 * Restore
+	 *
+	 * @throws Exception
+	 *
+	 * @return void
+	 *
+	 * @since    2.0
+	 */
+	public function restore()
 	{
 		if (!JSession::checkToken('post'))
 		{
@@ -121,12 +170,12 @@ class KunenaAdminControllerTrash extends KunenaController
 			return;
 		}
 
-		$cid = JRequest::getVar('cid', array(), 'post', 'array'); // Array of integers
-		JArrayHelper::toInteger($cid);
+		$cid = JFactory::getApplication()->input->get('cid', array(), 'post', 'array');
+		Joomla\Utilities\ArrayHelper::toInteger($cid);
 
-		$type = JRequest::getCmd('type', 'topics', 'post');
+		$type = JFactory::getApplication()->input->getCmd('type', 'topics', 'post');
 
-		if (empty ($cid))
+		if (empty($cid))
 		{
 			$this->app->enqueueMessage(JText::_('COM_KUNENA_A_NO_MESSAGES_SELECTED'), 'notice');
 			$this->setRedirect(KunenaRoute::_($this->baseurl, false));
@@ -135,9 +184,11 @@ class KunenaAdminControllerTrash extends KunenaController
 		}
 
 		$nb_items = 0;
+
 		if ($type == 'messages')
 		{
 			$messages = KunenaForumMessageHelper::getMessages($cid, 'none');
+
 			foreach ($messages as $target)
 			{
 				if ($target->publish(KunenaForum::PUBLISHED))
@@ -153,9 +204,10 @@ class KunenaAdminControllerTrash extends KunenaController
 		elseif ($type == 'topics')
 		{
 			$topics = KunenaForumTopicHelper::getTopics($cid, 'none');
+
 			foreach ($topics as $target)
 			{
-				if ($target->getState()==KunenaForum::UNAPPROVED)
+				if ($target->getState() == KunenaForum::UNAPPROVED)
 				{
 					$status = KunenaForum::UNAPPROVED;
 				}
@@ -163,7 +215,7 @@ class KunenaAdminControllerTrash extends KunenaController
 				{
 					$status = KunenaForum::PUBLISHED;
 				}
-				
+
 				if ($target->publish($status))
 				{
 					$nb_items++;
@@ -195,6 +247,8 @@ class KunenaAdminControllerTrash extends KunenaController
 	 * Method to redirect user on cancel on purge page
 	 *
 	 * @return void
+	 *
+	 * @since    2.0
 	 */
 	public function cancel()
 	{

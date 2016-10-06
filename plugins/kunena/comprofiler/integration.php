@@ -2,36 +2,44 @@
 /**
  * Kunena Plugin
  *
- * @package       Kunena.Plugins
- * @subpackage    Comprofiler
+ * @package     Kunena.Plugins
+ * @subpackage  Comprofiler
  *
- * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link          https://www.kunena.org
+ * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link        https://www.kunena.org
  **/
-defined('_JEXEC') or die ();
+defined('_JEXEC') or die();
 
 class KunenaIntegrationComprofiler
 {
 	protected static $open = false;
 
+	/**
+	 *
+	 */
 	public static function open()
 	{
 		if (self::$open)
 		{
 			return;
 		}
+
 		self::$open = true;
 		$params     = array();
 		self::trigger('onStart', $params);
 	}
 
+	/**
+	 *
+	 */
 	public static function close()
 	{
 		if (!self::$open)
 		{
 			return;
 		}
+
 		self::$open = false;
 		$params     = array();
 		self::trigger('onEnd', $params);
@@ -41,7 +49,10 @@ class KunenaIntegrationComprofiler
 	 * Triggers CB events
 	 *
 	 * Current events: profileIntegration=0/1, avatarIntegration=0/1
-	 **/
+	 *
+	 * @param $event
+	 * @param $params
+	 */
 	public static function trigger($event, &$params)
 	{
 		global $_PLUGINS;

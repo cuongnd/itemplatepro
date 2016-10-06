@@ -14,13 +14,17 @@ defined('_JEXEC') or die;
  *
  * @package     Joomla.Administrator
  * @subpackage  com_plugins
- * @since       1.5
+ *
+ * @since       K1.5
  */
 class KunenaAdminViewPlugins extends KunenaView
 {
-
 	/**
 	 * Display the view
+	 *
+	 * @param   null  $tpl
+	 *
+	 * @return mixed
 	 */
 	function displayDefault($tpl = null)
 	{
@@ -47,19 +51,13 @@ class KunenaAdminViewPlugins extends KunenaView
 	/**
 	 * Add the page title and toolbar.
 	 *
-	 * @since   1.6
+	 * @since   K1.6
+	 *
+	 * @return    string    The HTML code for the select tag
 	 */
 	protected function setToolbar()
 	{
-		if (version_compare(JVERSION, '3', '>'))
-		{
-			JToolbarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_PLUGIN_MANAGER'), 'puzzle');
-		}
-		else
-		{
-			JToolbarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_PLUGIN_MANAGER'), 'pluginsmanager');
-		}
-
+		JToolbarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_PLUGIN_MANAGER'), 'puzzle');
 		JToolbarHelper::spacer();
 		JToolbarHelper::editList('plugin.edit');
 		JToolbarHelper::divider();
@@ -68,8 +66,10 @@ class KunenaAdminViewPlugins extends KunenaView
 		JToolbarHelper::divider();
 		JToolbarHelper::checkin('checkin');
 		JToolbarHelper::spacer();
+		JToolbarHelper::custom('resync', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
+		JToolbarHelper::spacer();
 		$help_url  = 'https://www.kunena.org/docs/';
-		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
+		JToolBarHelper::help('COM_KUNENA', false, $help_url);
 	}
 
 	/**
@@ -106,14 +106,18 @@ class KunenaAdminViewPlugins extends KunenaView
 		return $sortFields;
 	}
 
+	/**
+	 * Returns an array of fields the table can be sorted by
+	 *
+	 * @return  array  Array containing the field name to sort by as the key and display text as value
+	 *
+	 * @since   3.0
+	 */
 	protected function getSortDirectionFields()
 	{
 		$sortDirection = array();
-//		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
-//		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
-		// TODO: remove it when J2.5 support is dropped
-		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('COM_KUNENA_FIELD_LABEL_ASCENDING'));
-		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('COM_KUNENA_FIELD_LABEL_DESCENDING'));
+		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
+		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
 
 		return $sortDirection;
 	}
