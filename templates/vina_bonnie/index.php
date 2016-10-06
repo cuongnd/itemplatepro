@@ -2,6 +2,7 @@
 JHTML::_("jquery.ui");
 $doc = JFactory::getDocument();
 $doc->addScript(JUri::root() . '/media/system/js/jquery.easing.1.3.js');
+$doc->addLessStyleSheet(JUri::root().'media/jui/less/bootstrap.less');
 $doc->addLessStyleSheet(JUri::root().'templates/vina_bonnie/less/custom.less');
 /**
  * @package Helix Framework

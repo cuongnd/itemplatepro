@@ -272,7 +272,6 @@ class JApplicationCms extends JApplicationWeb
 		}
 		// Send the application response.
 		$this->respond();
-
 		// Trigger the onAfterRespond event.
 		$this->triggerEvent('onAfterRespond');
 	}

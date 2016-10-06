@@ -205,6 +205,8 @@ final class JApplicationSite extends JApplicationCms
 	 */
 	protected function doExecute()
 	{
+
+
 		// Initialise the application
 		$this->initialiseApp();
 

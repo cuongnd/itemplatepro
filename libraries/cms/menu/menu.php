@@ -18,6 +18,7 @@ use Joomla\Registry\Registry;
  */
 class JMenu
 {
+	public static $list_md5;
 	/**
 	 * Array to hold the menu items
 	 *
@@ -309,6 +310,44 @@ class JMenu
 	}
 	public function get_items_by_menu_type($menu_type){
 		$list_menu_item=array();
+		$lang=JFactory::getLanguage();
+		$current_lang=$lang->getTag();
+		if($lang->getDefault()!=$current_lang) {
+			$list_menu_item_id = array_keys($this->_items);
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select('falang_content.reference_id,falang_content.reference_field,falang_content.value')
+				->from('#__falang_content AS falang_content')
+				->where('falang_content.reference_table=' . $query->q('menu') . ' AND reference_id IN (' . implode(',', $list_menu_item_id) . ')')
+				->leftJoin('#__languages AS languages ON languages.lang_id=falang_content.language_id')
+				->where('languages.lang_code=' . $query->q($current_lang));
+			$query_md5 = md5($query);
+			if (!isset(static::$list_md5[$query_md5])) {
+				$db->setQuery($query);
+				static::$list_md5[$query_md5] = $db->loadObjectList('reference_id');
+			}
+			$list_falang_content = static::$list_md5[$query_md5];
+			foreach ($list_falang_content as $reference_id => $falang_content) {
+				if (!$this->_items[$reference_id]->check_lang) {
+					$reference_field = $falang_content->reference_field;
+					$value = $falang_content->value;
+					if ($reference_field == 'params') {
+						// Decode the item params
+						$result = Registry::getInstance('falang_content_menu_item_id_' . $reference_id);
+						if (empty($result->toArray())) {
+							$result->loadString($value);
+						}
+						$this->_items[$reference_id]->params = $result;
+
+					} else {
+						$this->_items[$reference_id]->$reference_field = $value;
+					}
+					$this->_items[$reference_id]->check_lang = true;
+				}
+
+			}
+		}
+
 		foreach ($this->_items as $item){
 			if($item->menutype==$menu_type){
 				$list_menu_item[]=$item;

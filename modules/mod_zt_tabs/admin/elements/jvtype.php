@@ -52,6 +52,7 @@ class JElementJvType
 			$cId = JRequest::getVar('id');
 		}
 		$cId=$cId?$cId:0;
+		$cId=(int)$cId;
 		$query=$db->getQuery(true);
 
 		$sql = "SELECT params FROM #__modules WHERE id=$cId";

@@ -13,6 +13,7 @@ require_once __DIR__ . '/helper.php';
 
 $helper=ModMenuHelper::getInstance();
 
+$lang   = JFactory::getLanguage();
 
 $list       = $helper->getList($params);
 $base       = $helper->getBase($params);
