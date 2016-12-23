@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  *
  * @package     Joomla.Administrator
  * @subpackage  com_plugins
- * @since       K1.5
+ * @since       1.5
  */
 class KunenaAdminViewPlugin extends KunenaView
 {
@@ -26,12 +26,6 @@ class KunenaAdminViewPlugin extends KunenaView
 
 	/**
 	 * Display the view
-	 *
-	 * @param   null  $tpl
-	 *
-	 * @return bool
-	 *
-	 * @throws Exception
 	 */
 	public function displayEdit($tpl = null)
 	{
@@ -42,7 +36,9 @@ class KunenaAdminViewPlugin extends KunenaView
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			throw new Exception(implode("\n", $errors), 500);
+			JError::raiseError(500, implode("\n", $errors));
+
+			return;
 		}
 
 		$this->addToolbar();
@@ -52,21 +48,27 @@ class KunenaAdminViewPlugin extends KunenaView
 	/**
 	 * Add the page title and toolbar.
 	 *
-	 * @return bool
-	 *
 	 * @since   1.6
 	 */
 	protected function addToolbar()
 	{
 		JFactory::getApplication()->input->set('hidemainmenu', true);
+
+		//$canDo = PluginsHelper::getActions();
+
 		JToolbarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_PLUGIN_MANAGER'), 'pluginsmanager');
 		JToolbarHelper::spacer();
+
+		// If not checked out, can save the item.
+		//if ($canDo->get('core.edit'))
+		//{
 		JToolbarHelper::apply('apply');
 		JToolbarHelper::save('save');
+		//}
 		JToolbarHelper::cancel('cancel', 'JTOOLBAR_CLOSE');
 		JToolbarHelper::spacer();
 
 		$help_url  = 'https://www.kunena.org/docs/';
-		JToolBarHelper::help('COM_KUNENA', false, $help_url);
+		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
 	}
 }

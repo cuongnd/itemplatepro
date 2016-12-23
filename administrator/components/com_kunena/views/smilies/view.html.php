@@ -2,28 +2,20 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Views
+ * @package       Kunena.Administrator
+ * @subpackage    Views
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * About view for Kunena smilies backend
- *
- * @since  K1.X
  */
 class KunenaAdminViewSmilies extends KunenaView
 {
-	/**
-	 *
-	 * @param   null $tpl
-	 *
-	 * @return mixed
-	 */
 	function display($tpl = null)
 	{
 		$this->setToolbar();
@@ -44,28 +36,34 @@ class KunenaAdminViewSmilies extends KunenaView
 		return parent::display($tpl);
 	}
 
-	/**
-	 *
-	 */
 	protected function setToolbar()
 	{
 		$this->filterActive = $this->escape($this->state->get('filter.active'));
 		$this->pagination   = $this->get('Pagination');
 
-		JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'thumbs-up');
+		if (version_compare(JVERSION, '3', '>'))
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'thumbs-up');
+		}
+		else
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'smilies');
+		}
+
 		JToolBarHelper::spacer();
 		JToolBarHelper::addNew('add', 'COM_KUNENA_NEW_SMILIE');
+
+		//TODO: Implement flag to hide options, personal preference option.
+		//if($this->filterActive || $this->pagination->total > 0) {
 		JToolBarHelper::editList();
 		JToolBarHelper::divider();
 		JToolBarHelper::deleteList();
+		//}
 		JToolBarHelper::spacer();
 		$help_url  = 'https://www.kunena.org/docs/Smiley_management';
-		JToolBarHelper::help('COM_KUNENA', false, $help_url);
+		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
 	}
 
-	/**
-	 * @return array
-	 */
 	protected function getSortFields()
 	{
 		$sortFields   = array();
@@ -76,14 +74,14 @@ class KunenaAdminViewSmilies extends KunenaView
 		return $sortFields;
 	}
 
-	/**
-	 * @return array
-	 */
 	protected function getSortDirectionFields()
 	{
 		$sortDirection = array();
-		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
-		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
+		//$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
+		//$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
+		// TODO: remove it when J2.5 support is dropped
+		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('COM_KUNENA_FIELD_LABEL_ASCENDING'));
+		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('COM_KUNENA_FIELD_LABEL_DESCENDING'));
 
 		return $sortDirection;
 	}

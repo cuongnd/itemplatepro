@@ -2,13 +2,13 @@
 /**
  * Kunena Component
  *
- * @package    Kunena.Installer
+ * @package       Kunena.Installer
  *
- * @copyright  (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link       https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Kunena 2.0 jUpgrade migration class from Joomla! 1.5 to Joomla! 2.5
@@ -17,9 +17,6 @@ defined('_JEXEC') or die();
 class jUpgradeComponentKunena extends jUpgradeExtensions
 {
 
-	/**
-	 * @param   null $step
-	 */
 	public function __construct($step = null)
 	{
 		// Joomla 2.5 support
@@ -30,7 +27,7 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 
 		if (!defined('JVERSION'))
 		{
-			$version = new JVersion;
+			$version = new JVersion();
 			define('JVERSION', $version->getShortVersion());
 		}
 
@@ -40,28 +37,26 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 	/**
 	 * Check if Kunena migration is supported.
 	 *
-	 * @return   boolean
-	 *
-	 * @since   1.6.4
+	 * @return    boolean
+	 * @since    1.6.4
 	 */
 	protected function detectExtension()
 	{
-		// Install Kunena 2.0 only into Joomla 3.4
-		return version_compare(JVERSION, '3.4', '>=');
+		// Install Kunena 2.0 only into Joomla 2.5
+		return version_compare(JVERSION, '2.5', '>=');
 	}
 
 	/**
 	 * Get tables to be migrated.
 	 *
 	 * @return    array    List of tables without prefix
-	 *
 	 * @since    1.6.4
 	 */
 	protected function getCopyTables()
 	{
 		require_once JPATH_ADMINISTRATOR . '/components/com_kunena/api.php';
 		require_once KPATH_ADMIN . '/install/schema.php';
-		$schema = new KunenaModelSchema;
+		$schema = new KunenaModelSchema();
 		$tables = $schema->getSchemaTables('');
 
 		return array_values($tables);
@@ -77,10 +72,9 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 	 * Returning false will force jUpgrade to call this function again,
 	 * which allows you to continue import by reading $this->state before continuing.
 	 *
-	 * @param   string $table
+	 * @param string $table
 	 *
 	 * @return    boolean Ready (true/false)
-	 *
 	 * @since    1.6.4
 	 * @throws    Exception
 	 */
@@ -98,7 +92,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 		foreach ($rows as &$row)
 		{
 			$row['params'] = $this->convertParams($row['params']);
-
 			if (!isset($row['accesstype']) || $row['accesstype'] == 'joomla.group')
 			{
 				if ($row['admin_access'] != 0)
@@ -135,7 +128,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 				$row['access']++;
 			}
 		}
-
 		$this->setDestinationData($rows);
 
 		return true;
@@ -144,10 +136,9 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 	/**
 	 * A hook to be able to modify params prior as they are converted to JSON.
 	 *
-	 * @param   object $object A reference to the parameters as an object.
+	 * @param    object $object A reference to the parameters as an object.
 	 *
 	 * @return    void
-	 *
 	 * @since    0.4.
 	 * @throws    Exception
 	 */
@@ -164,12 +155,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 		}
 	}
 
-	/**
-	 * @param $list
-	 *
-	 * @return array
-	 *
-	 */
 	protected function mapUserGroups($list)
 	{
 		if (!is_array($list))
@@ -202,7 +187,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 	 * which allows you to continue import by reading $this->state before continuing.
 	 *
 	 * @return    boolean Ready (true/false)
-	 *
 	 * @since    1.6.4
 	 * @throws    Exception
 	 */
@@ -220,7 +204,7 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 		// First fix all broken menu items
 		$query = "UPDATE #__menu SET component_id={$this->db_new->quote($component->extension_id)} WHERE type = 'component' AND link LIKE '%option={$this->name}%'";
 		$this->db_new->setQuery($query);
-		$this->db_new->execute();
+		$this->db_new->query();
 
 		$menumap = $this->getMapList('menus');
 
@@ -263,7 +247,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 			}
 
 			$update = false;
-
 			switch ($menuitem->query['view'])
 			{
 				case 'home':
@@ -275,7 +258,6 @@ class jUpgradeComponentKunena extends jUpgradeExtensions
 					}
 					break;
 			}
-
 			if ($update)
 			{
 				// Update menuitem link

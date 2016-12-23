@@ -2,14 +2,14 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Models
+ * @package       Kunena.Administrator
+ * @subpackage    Models
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 jimport('joomla.application.component.model');
 
@@ -20,9 +20,6 @@ jimport('joomla.application.component.model');
  */
 class KunenaAdminModelConfig extends KunenaModel
 {
-	/**
-	 * @return array
-	 */
 	function getConfiglists()
 	{
 		$lists = array();
@@ -220,7 +217,6 @@ class KunenaAdminModelConfig extends KunenaModel
 		$listUserDeleteMessage[]     = JHtml::_('select.option', '0', JText::_('COM_KUNENA_A_DELETEMESSAGE_NOT_ALLOWED'));
 		$listUserDeleteMessage[]     = JHtml::_('select.option', '1', JText::_('COM_KUNENA_A_DELETEMESSAGE_ALLOWED_IF_REPLIES'));
 		$listUserDeleteMessage[]     = JHtml::_('select.option', '2', JText::_('COM_KUNENA_A_DELETEMESSAGE_ALWAYS_ALLOWED'));
-		$listUserDeleteMessage[]     = JHtml::_('select.option', '3', JText::_('COM_KUNENA_CONFIG_DELETEMESSAGE_NOT_FIRST_MESSAGE'));
 		$lists['userdeletetmessage'] = JHtml::_('select.genericlist', $listUserDeleteMessage, 'cfg_userdeletetmessage', 'class="inputbox" size="1"', 'value', 'text', $this->config->userdeletetmessage);
 
 		$latestCategoryIn           = array();
@@ -253,12 +249,13 @@ class KunenaAdminModelConfig extends KunenaModel
 		$listBbcodeImgSecure[]       = JHtml::_('select.option', 'link', JText::_('COM_KUNENA_COM_A_BBCODE_IMG_SECURE_OPTION_LINK'));
 		$listBbcodeImgSecure[]       = JHtml::_('select.option', 'image', JText::_('COM_KUNENA_COM_A_BBCODE_IMG_SECURE_OPTION_IMAGE'));
 		$lists ['bbcode_img_secure'] = JHtml::_('select.genericlist', $listBbcodeImgSecure, 'cfg_bbcode_img_secure', 'class="inputbox" size="1"', 'value', 'text', $this->config->bbcode_img_secure);
+
 		$lists ['listcat_show_moderators'] = JHtml::_('select.genericlist', $yesno, 'cfg_listcat_show_moderators', 'class="inputbox" size="1"', 'value', 'text', $this->config->listcat_show_moderators);
+
 		$showlightbox       = $yesno;
 		$showlightbox[]     = JHtml::_('select.option', 2, JText::_('COM_KUNENA_A_LIGHTBOX_NO_JS'));
 		$lists ['lightbox'] = JHtml::_('select.genericlist', $showlightbox, 'cfg_lightbox', 'class="inputbox" size="1"', 'value', 'text', $this->config->lightbox);
 
-		$timesel[] = JHtml::_('select.option', -1, JText::_('COM_KUNENA_SHOW_SELECT_ALL'));
 		$timesel[] = JHtml::_('select.option', 0, JText::_('COM_KUNENA_SHOW_LASTVISIT'));
 		$timesel[] = JHtml::_('select.option', 4, JText::_('COM_KUNENA_SHOW_4_HOURS'));
 		$timesel[] = JHtml::_('select.option', 8, JText::_('COM_KUNENA_SHOW_8_HOURS'));
@@ -311,6 +308,17 @@ class KunenaAdminModelConfig extends KunenaModel
 		$email_recipient_privacy[]         = JHtml::_('select.option', 'bcc', JText::_('COM_KUNENA_A_SUBSCRIPTIONS_EMAIL_RECIPIENT_PRIVACY_OPTION_BCC'));
 		$lists ['email_recipient_privacy'] = JHtml::_('select.genericlist', $email_recipient_privacy, 'cfg_email_recipient_privacy', 'class="inputbox" size="1"', 'value', 'text', $this->config->email_recipient_privacy);
 
+		$recaptcha_theme           = array();
+		$recaptcha_theme[]         = JHtml::_('select.option', 'red', JText::_('COM_KUNENA_A_RECAPTCHA_THEME_OPTION_RED'));
+		$recaptcha_theme[]         = JHtml::_('select.option', 'white', JText::_('COM_KUNENA_A_RECAPTCHA_THEME_OPTION_WHITE'));
+		$recaptcha_theme[]         = JHtml::_('select.option', 'blackglass', JText::_('COM_KUNENA_A_RECAPTCHA_THEME_OPTION_BLACK'));
+		$recaptcha_theme[]         = JHtml::_('select.option', 'clean', JText::_('COM_KUNENA_A_RECAPTCHA_THEME_OPTION_CLEAN'));
+		$lists ['recaptcha_theme'] = JHtml::_('select.genericlist', $recaptcha_theme, 'cfg_recaptcha_theme', 'class="inputbox" size="1"', 'value', 'text', $this->config->recaptcha_theme);
+
+		// Added new options into Kunena 2.0.0
+		$lists ['keywords']     = JHtml::_('select.genericlist', $yesno, 'cfg_keywords', 'class="inputbox" size="1"', 'value', 'text', $this->config->keywords);
+		$lists ['userkeywords'] = JHtml::_('select.genericlist', $yesno, 'cfg_userkeywords', 'class="inputbox" size="1"', 'value', 'text', $this->config->userkeywords);
+
 		$uploads                = array();
 		$uploads[]              = JHtml::_('select.option', 'everybody', JText::_('COM_KUNENA_EVERYBODY'));
 		$uploads[]              = JHtml::_('select.option', 'registered', JText::_('COM_KUNENA_REGISTERED_USERS'));
@@ -349,8 +357,8 @@ class KunenaAdminModelConfig extends KunenaModel
 		$lists ['fallback_english'] = JHtml::_('select.genericlist', $yesno, 'cfg_fallback_english', 'class="inputbox" size="1"', 'value', 'text', $this->config->fallback_english);
 
 		$cache       = array();
-		$cache[] = JHtml::_('select.option', '1', JText::_('COM_KUNENA_CFG_OPTION_USE_GLOBAL'));
-		$cache[] = JHtml::_('select.option', '0', JText::_('COM_KUNENA_CFG_OPTION_NO_CACHING'));
+		$cachetime[] = JHtml::_('select.option', '1', JText::_('COM_KUNENA_CFG_OPTION_USE_GLOBAL'));
+		$cachetime[] = JHtml::_('select.option', '0', JText::_('COM_KUNENA_CFG_OPTION_NO_CACHING'));
 
 		$cachetime            = array();
 		$cachetime[]          = JHtml::_('select.option', '60', JText::_('COM_KUNENA_CFG_OPTION_1_MINUTE'));
@@ -452,19 +460,6 @@ class KunenaAdminModelConfig extends KunenaModel
 
 		$lists ['allow_change_subject'] = JHtml::_('select.genericlist', $yesno, 'cfg_allow_change_subject', 'class="inputbox" size="1"', 'value', 'text', $this->config->allow_change_subject);
 
-		//K5.0
-		$lists ['read_only'] = JHtml::_('select.genericlist', $yesno, 'cfg_read_only', 'class="inputbox" size="1"', 'value', 'text', $this->config->read_only);
-
-		$lists['ratingenabled'] = JHTML::_('select.genericlist', $yesno, 'cfg_ratingenabled', 'class="inputbox" size="1"', 'value', 'text', $this->config->ratingenabled);
-
-		$lists ['url_subject_topic'] = JHtml::_('select.genericlist', $yesno, 'cfg_url_subject_topic', 'class="inputbox" size="1"', 'value', 'text', $this->config->url_subject_topic);
-		
-		$lists ['log_moderation'] = JHtml::_('select.genericlist', $yesno, 'cfg_log_moderation', 'class="inputbox" size="1"', 'value', 'text', $this->config->log_moderation);
-		
-		$lists ['attachment_utf8'] = JHtml::_('select.genericlist', $yesno, 'cfg_attachment_utf8', 'class="inputbox" size="1"', 'value', 'text', $this->config->attachment_utf8);
-		
-		$lists ['autoembedsoundcloud']    = JHtml::_('select.genericlist', $yesno, 'cfg_autoembedsoundcloud', 'class="inputbox" size="1"', 'value', 'text', $this->config->autoembedsoundcloud);
-		
 		return $lists;
 	}
 }

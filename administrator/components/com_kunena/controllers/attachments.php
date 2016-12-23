@@ -2,52 +2,30 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Controllers
+ * @package       Kunena.Administrator
+ * @subpackage    Controllers
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Kunena Attachments Controller
  *
- * @since  2.0
+ * @since 2.0
  */
 class KunenaAdminControllerAttachments extends KunenaController
 {
-	/**
-	 *
-	 * @since    2.0.0-BETA2
-	 *
-	 * @var null|string
-	 */
 	protected $baseurl = null;
 
-	/**
-	 * Constructor
-	 *
-	 * @param   array  $config  Construct
-	 *
-	 * @since 2.0
-	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
 		$this->baseurl = 'administrator/index.php?option=com_kunena&view=attachments';
 	}
 
-	/**
-	 * Delete
-	 *
-	 * @throws Exception
-	 *
-	 * @return void
-	 *
-	 * @since 2.0
-	 */
 	public function delete()
 	{
 		if (!JSession::checkToken('post'))
@@ -58,8 +36,8 @@ class KunenaAdminControllerAttachments extends KunenaController
 			return;
 		}
 
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'post', 'array');
-		Joomla\Utilities\ArrayHelper::toInteger($cid);
+		$cid = JRequest::getVar('cid', array(), 'post', 'array'); // Array of integers
+		JArrayHelper::toInteger($cid);
 
 		if (!$cid)
 		{
@@ -77,14 +55,14 @@ class KunenaAdminControllerAttachments extends KunenaController
 			$attachments = array($attachment->id, 1);
 			$attach = array();
 			$removeList = array_keys(array_diff_key($attachments, $attach));
-			Joomla\Utilities\ArrayHelper::toInteger($removeList);
+			JArrayHelper::toInteger($removeList);
 			$message->removeAttachments($removeList);
 			$message->save();
 
 			$topic = $message->getTopic();
 			$attachment->delete();
 
-			if ($topic->attachments > 0)
+			if ( $topic->attachments > 0 )
 			{
 				$topic->attachments = $topic->attachments - 1;
 				$topic->save(false);

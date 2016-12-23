@@ -2,33 +2,24 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Controllers
+ * @package       Kunena.Administrator
+ * @subpackage    Controllers
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Kunena Plugins Controller
  *
- * @since  2.0
+ * @since 2.0
  */
 class KunenaAdminControllerPlugins extends KunenaController
 {
 	protected $baseurl = null;
 
-	/**
-	 * Construct
-	 *
-	 * @param   array  $config  config
-	 *
-	 * @throws Exception
-	 *
-	 * @since    2.0
-	 */
 	public function __construct($config = array())
 	{
 		$this->option = 'com_kunena';
@@ -57,17 +48,6 @@ class KunenaAdminControllerPlugins extends KunenaController
 		JFactory::getLanguage()->load('com_plugins', JPATH_ADMINISTRATOR);
 	}
 
-	/**
-	 * Getmodel
-	 *
-	 * @param   string  $name    name
-	 * @param   string  $prefix  prefix
-	 * @param   array   $config  config
-	 *
-	 * @return object
-	 *
-	 * @since    2.0
-	 */
 	public function getModel($name = '', $prefix = '', $config = array())
 	{
 		if (empty($name))
@@ -94,7 +74,7 @@ class KunenaAdminControllerPlugins extends KunenaController
 		$cid   = JFactory::getApplication()->input->get('cid', array(), 'array');
 		$data  = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
 		$task  = $this->getTask();
-		$value = Joomla\Utilities\ArrayHelper::getValue($data, $task, 0, 'int');
+		$value = JArrayHelper::getValue($data, $task, 0, 'int');
 
 		if (empty($cid))
 		{
@@ -106,7 +86,7 @@ class KunenaAdminControllerPlugins extends KunenaController
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers
-			Joomla\Utilities\ArrayHelper::toInteger($cid);
+			JArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			if (!$model->publish($cid, $value))
@@ -135,10 +115,6 @@ class KunenaAdminControllerPlugins extends KunenaController
 				$this->setMessage(JText::plural($ntext, count($cid)));
 			}
 		}
-
-		$editor = KunenaBbcodeEditor::getInstance();
-		$editor->initializeHMVC();
-
 		$extension    = $this->input->get('extension');
 		$extensionURL = ($extension) ? '&extension=' . $extension : '';
 		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $extensionURL, false));
@@ -157,7 +133,7 @@ class KunenaAdminControllerPlugins extends KunenaController
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		$ids = JFactory::getApplication()->input->post->get('cid', array(), 'array');
-		$inc = ($this->getTask() == 'orderup') ? -1 : + 1;
+		$inc = ($this->getTask() == 'orderup') ? -1 : +1;
 
 		$model  = $this->getModel();
 		$return = $model->reorder($ids, $inc);
@@ -197,8 +173,8 @@ class KunenaAdminControllerPlugins extends KunenaController
 		$order = $this->input->post->get('order', array(), 'array');
 
 		// Sanitize the input
-		Joomla\Utilities\ArrayHelper::toInteger($pks);
-		Joomla\Utilities\ArrayHelper::toInteger($order);
+		JArrayHelper::toInteger($pks);
+		JArrayHelper::toInteger($order);
 
 		// Get the model
 		$model = $this->getModel();
@@ -251,28 +227,11 @@ class KunenaAdminControllerPlugins extends KunenaController
 		}
 		else
 		{
-			$editor = KunenaBbcodeEditor::getInstance();
-			$editor->initializeHMVC();
-			
 			// Checkin succeeded.
 			$message = JText::plural($this->text_prefix . '_N_ITEMS_CHECKED_IN', count($ids));
 			$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false), $message);
 
 			return true;
 		}
-	}
-	
-	/**
-	 * Regenerate editor file
-	 * 
-	 * @since 5.0.2
-	 */
-	public function resync()
-	{
-		$editor = KunenaBbcodeEditor::getInstance();
-		$editor->initializeHMVC();
-		
-		$message = 'Sync done';
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false), $message);
 	}
 }

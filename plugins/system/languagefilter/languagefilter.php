@@ -687,10 +687,8 @@ class PlgSystemLanguageFilter extends JPlugin
 	 *
 	 * @since   1.7
 	 */
-	public function onBeforeDoExecute()
+	public function onAfterDispatch()
 	{
-		echo "sdfdfds";
-		die;
 		$doc = JFactory::getDocument();
 
 		if ($this->app->isSite() && $this->params->get('alternate_meta') && $doc->getType() == 'html')

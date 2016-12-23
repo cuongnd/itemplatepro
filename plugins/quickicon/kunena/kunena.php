@@ -2,20 +2,21 @@
 /**
  * Kunena QuickIcon Plugin
  *
- * @package     Kunena.Plugins
- * @subpackage  QuickIcon
+ * @package       Kunena.Plugins
+ * @subpackage    QuickIcon
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Class plgQuickiconKunena
  */
 class plgQuickiconKunena extends JPlugin
 {
+
 	public function __construct(& $subject, $config)
 	{
 		// Do not load if Kunena version is not supported or KunenaForum isn't detected
@@ -33,7 +34,7 @@ class plgQuickiconKunena extends JPlugin
 	/**
 	 * Display Kunena backend icon in Joomla 2.5+
 	 *
-	 * @param   string  $context
+	 * @param string $context
 	 *
 	 * @return array|null
 	 */
@@ -63,10 +64,9 @@ class plgQuickiconKunena extends JPlugin
 
 			if ($list)
 			{
-				$updateInfo          = new stdClass;
+				$updateInfo          = new stdClass();
 				$updateInfo->addons  = 0;
 				$updateInfo->version = 0;
-
 				foreach ($list as $item)
 				{
 					if ($item->element == 'pkg_kunena')
@@ -78,6 +78,7 @@ class plgQuickiconKunena extends JPlugin
 						$updateInfo->addons++;
 					}
 				}
+
 			}
 			else
 			{
@@ -101,6 +102,7 @@ class plgQuickiconKunena extends JPlugin
 			$img  = $useIcons ? 'warning' : 'kunena/icons/icon-48-kupdate-alert-white.png';
 			$icon = 'kunena/icons/icon-48-kupdate-alert-white.png';
 			$text = JText::_('PLG_QUICKICON_KUNENA_COMPLETE_INSTALLATION');
+
 		}
 		elseif ($updateInfo === null)
 		{
@@ -108,6 +110,7 @@ class plgQuickiconKunena extends JPlugin
 			$img  = $useIcons ? 'remove' : 'kunena/icons/kunena-logo-48-white.png';
 			$icon = 'kunena/icons/kunena-logo-48-white.png';
 			$text = JText::_('COM_KUNENA');
+
 		}
 		elseif ($updateInfo === false)
 		{
@@ -115,6 +118,7 @@ class plgQuickiconKunena extends JPlugin
 			$img  = $useIcons ? 'minus' : 'kunena/icons/icon-48-kupdate-alert-white.png';
 			$icon = 'kunena/icons/icon-48-kupdate-alert-white.png';
 			$text = JText::_('COM_KUNENA') . '<br />' . JText::_('PLG_QUICKICON_KUNENA_UPDATE_DISABLED');
+
 		}
 		elseif (!empty($updateInfo->version) && version_compare(KunenaForum::version(), $updateInfo->version, '<'))
 		{
@@ -123,6 +127,7 @@ class plgQuickiconKunena extends JPlugin
 			$icon = 'kunena/icons/icon-48-kupdate-update-white.png';
 			$text = 'Kunena ' . $updateInfo->version . '<br />' . JText::_('PLG_QUICKICON_KUNENA_UPDATE_NOW');
 			$link = 'index.php?option=com_installer&view=update&filter_search=kunena';
+
 		}
 		elseif (!empty($updateInfo->addons))
 		{
@@ -131,6 +136,7 @@ class plgQuickiconKunena extends JPlugin
 			$icon = 'kunena/icons/icon-48-kupdate-update-white.png';
 			$text = JText::_('COM_KUNENA') . '<br />' . JText::sprintf('PLG_QUICKICON_KUNENA_UPDATE_ADDONS', $updateInfo->addons);
 			$link = 'index.php?option=com_installer&view=update&filter_search=kunena';
+
 		}
 		else
 		{

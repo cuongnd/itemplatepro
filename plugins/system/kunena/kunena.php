@@ -1,15 +1,14 @@
 <?php
 /**
  * Kunena System Plugin
+ * @package Kunena.Plugins
+ * @subpackage System
  *
- * @package     Kunena.Plugins
- * @subpackage  System
- *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined ( '_JEXEC' ) or die ();
 
 /**
  * Class plgSystemKunena
@@ -18,23 +17,21 @@ class plgSystemKunena extends JPlugin
 {
 
 	/**
-	 * @param   object $subject
-	 * @param   array  $config
+	 * @param object $subject
+	 * @param array  $config
 	 */
 	function __construct(&$subject, $config)
 	{
 		// Check if Kunena API exists
 		$api = JPATH_ADMINISTRATOR . '/components/com_kunena/api.php';
-
-		if (!is_file($api))
+		if (!is_file ($api))
 		{
 			return;
 		}
 
-		jimport('joomla.application.component.helper');
-
+		jimport ( 'joomla.application.component.helper' );
 		// Check if Kunena component is installed/enabled
-		if (!JComponentHelper::isEnabled('com_kunena', true))
+		if (!JComponentHelper::isEnabled ( 'com_kunena', true ))
 		{
 			return;
 		}
@@ -48,7 +45,7 @@ class plgSystemKunena extends JPlugin
 			return;
 		}
 
-		parent::__construct($subject, $config);
+		parent::__construct ( $subject, $config );
 
 		// ! Always load language after parent::construct else the name of plugin isn't yet set
 		$this->loadLanguage('plg_system_kunena.sys');
@@ -75,14 +72,14 @@ class plgSystemKunena extends JPlugin
 	 * Option to enable or disable this, is found as plugin parameter.
 	 *
 	 * @access public
-	 * @see    self::runJoomlaContentEvent()
-	 * @since  Kunena 2.0
-	 * @todo   Make an object to array conversion, to support also single postings
+	 * @see self::runJoomlaContentEvent()
+	 * @since Kunena 2.0
+	 * @todo Make an object to array conversion, to support also single postings
 	 *
-	 * @param    string $context In which context were event called?
-	 * @param    array  $items   Array of multiple KunenaForumMessage objects
-	 * @param    object $params  JRegistry object holding eventual parameters
-	 * @param    int    $page    An integer holding page number
+	 * @param	string	$context	In which context were event called?
+	 * @param	array	$items		Array of multiple KunenaForumMessage objects
+	 * @param	object	$params		JRegistry object holding eventual parameters
+	 * @param	int		$page		An integer holding page number
 	 *
 	 * @return array of KunenaForumMessage objects
 	 */
@@ -160,24 +157,24 @@ class plgSystemKunena extends JPlugin
 	 * Runs all Joomla content plugins on a single KunenaForumMessage
 	 *
 	 * @access protected
-	 * @see    self::onKunenaPrepare()
-	 * @since  Kunena 2.0
+	 * @see self::onKunenaPrepare()
+	 * @since Kunena 2.0
 	 *
-	 * @param   string $text   String to run events on
-	 * @param   object $params JRegistry object holding eventual parameters
-	 * @param   int    $page   An integer holding page number
+	 * @param	string	$text		String to run events on
+	 * @param	object	$params		JRegistry object holding eventual parameters
+	 * @param	int		$page		An integer holding page number
 	 *
 	 * @return object KunenaForumMessage
 	 */
-	protected function runJoomlaContentEvent(&$text, &$params, $page = 0)
+	protected function runJoomlaContentEvent( &$text, &$params, $page = 0 )
 	{
-		$dispatcher = JEventDispatcher::getInstance();
+		$dispatcher = JDispatcher::getInstance();
 		JPluginHelper::importPlugin('content');
 
-		$row       = new stdClass;
+		$row = new stdClass();
 		$row->text = &$text;
 
-		$dispatcher->trigger('onContentPrepare', array('text', &$row, &$params, 0));
+		$dispatcher->trigger('onContentPrepare', array ('text', &$row, &$params, 0));
 
 		$text = &$row->text;
 
@@ -192,7 +189,7 @@ class plgSystemKunena extends JPlugin
 	 */
 	public function onUserAfterSave($user, $isnew, $success, $msg)
 	{
-		// Don't continue if the user wasn't stored successfully
+		//Don't continue if the user wasn't stored successfully
 		if (!$success)
 		{
 			return;
@@ -216,15 +213,8 @@ class plgSystemKunena extends JPlugin
 				LEFT JOIN #__kunena_user_categories AS s ON c.id=s.category_id AND s.user_id={{$db->quote($user->userid)}
 				WHERE c.parent>0 AND c.id IN ({$subscribedCategories}) AND s.user_id IS NULL";
 			$db->setQuery ( $query );
-			
-			try
-			{
-				$db->execute();
-			}
-			catch (JDatabaseExceptionExecuting $e)
-			{
-				KunenaError::displayDatabaseError($e);
-			}
+			$db->query ();
+			KunenaError::checkDatabaseError();
 
 			// Here's also query to subscribe all users (including blocked) to all existing cats:
 			$query = "INSERT INTO #__kunena_user_categories (user_id,category_id,subscribed)
@@ -245,7 +235,7 @@ class plgSystemKunena extends JPlugin
 	 * @param $manifest
 	 * @param $eid
 	 *
-	 * @return boolean|null
+	 * @return bool|null
 	 */
 	public function onExtensionBeforeInstall($method, $type, $manifest, $eid)
 	{
@@ -264,7 +254,7 @@ class plgSystemKunena extends JPlugin
 	 * @param $type
 	 * @param $manifest
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @throws Exception
 	 */
 	public function onExtensionBeforeUpdate($type, $manifest)
@@ -275,7 +265,7 @@ class plgSystemKunena extends JPlugin
 		}
 
 		// Generate component name
-		$name    = strtolower(JFilterInput::getInstance()->clean((string) $manifest->name, 'cmd'));
+		$name = strtolower(JFilterInput::getInstance()->clean((string) $manifest->name, 'cmd'));
 		$element = (substr($name, 0, 4) == "com_") ? $name : "com_{$name}";
 
 		if ($element != 'com_kunena')
@@ -297,10 +287,9 @@ class plgSystemKunena extends JPlugin
 
 		// Old version detected: emulate failed installation
 		$app = JFactory::getApplication();
-		$app->enqueueMessage(sprintf('Sorry, it is not possible to downgrade Kunena %s to version %s.',
-			KunenaForum::version(), $manifest->version), 'warning');
+		$app->enqueueMessage(sprintf('Sorry, it is not possible to downgrade Kunena %s to version %s.', KunenaForum::version(), $manifest->version), 'warning');
 		$app->enqueueMessage(JText::_('JLIB_INSTALLER_ABORT_COMP_INSTALL_CUSTOM_INSTALL_FAILURE'), 'error');
-		$app->enqueueMessage(JText::sprintf('COM_INSTALLER_MSG_UPDATE_ERROR', JText::_('COM_INSTALLER_TYPE_TYPE_' . strtoupper($type))));
+		$app->enqueueMessage(JText::sprintf('COM_INSTALLER_MSG_UPDATE_ERROR', JText::_('COM_INSTALLER_TYPE_TYPE_'.strtoupper($type))));
 		$app->redirect('index.php?option=com_installer');
 
 		return true;

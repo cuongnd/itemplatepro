@@ -2,32 +2,33 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Views
+ * @package       Kunena.Administrator
+ * @subpackage    Views
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * About view for Kunena cpanel
- *
- * @since  K1.X
  */
 class KunenaAdminViewCpanel extends KunenaView
 {
-	/**
-	 *
-	 */
 	function displayDefault()
 	{
 		$help_url  = 'https://www.kunena.org/docs/Category:Installation';
-		JToolBarHelper::help('COM_KUNENA', false, $help_url);
-		JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_DASHBOARD'), 'dashboard');
-		JToolBarHelper::link('https://www.kunena.org/bugs/changelog', JText::_('Changelog'));
-		JToolBarHelper::link('https://www.kunena.org/forum', JText::_('Get Support'));
+		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
+
+		if (version_compare(JVERSION, '3', '>'))
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_DASHBOARD'), 'dashboard');
+		}
+		else
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_DASHBOARD'), 'cp');
+		}
 
 		if (JFactory::getUser()->authorise('core.admin', 'com_kunena'))
 		{

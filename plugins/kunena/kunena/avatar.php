@@ -2,14 +2,14 @@
 /**
  * Kunena Plugin
  *
- * @package     Kunena.Plugins
- * @subpackage  Kunena
+ * @package       Kunena.Plugins
+ * @subpackage    Kunena
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 class KunenaAvatarKunena extends KunenaAvatar
 {
@@ -25,7 +25,7 @@ class KunenaAvatarKunena extends KunenaAvatar
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getEditURL()
 	{
@@ -53,11 +53,11 @@ class KunenaAvatarKunena extends KunenaAvatar
 			// If avatar does not exist use default image.
 			if ($sizex <= 90)
 			{
-				$avatar = 's_nophoto.png';
+				$avatar = 's_nophoto.jpg';
 			}
 			else
 			{
-				$avatar = 'nophoto.png';
+				$avatar = 'nophoto.jpg';
 			}
 
 			// Search from the template.
@@ -65,7 +65,6 @@ class KunenaAvatarKunena extends KunenaAvatar
 			$origPath = JPATH_SITE . '/' . $template->getAvatarPath($avatar);
 			$avatar   = $template->name . '/' . $avatar;
 		}
-
 		$dir  = dirname($avatar);
 		$file = basename($avatar);
 
@@ -83,8 +82,7 @@ class KunenaAvatarKunena extends KunenaAvatar
 
 		if (!is_file("{$path}/{$resized}/{$file}"))
 		{
-			KunenaImageHelper::version($origPath, "{$path}/{$resized}", $file, $sizex,
-				$sizey, intval($config->avatarquality), KunenaImage::SCALE_INSIDE, intval($config->avatarcrop));
+			KunenaImageHelper::version($origPath, "{$path}/{$resized}", $file, $sizex, $sizey, intval($config->avatarquality), KunenaImage::SCALE_INSIDE, intval($config->avatarcrop));
 			$timestamp = '?' . round(microtime(true));
 		}
 

@@ -2,26 +2,20 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Views
+ * @package       Kunena.Administrator
+ * @subpackage    Views
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Attachments view for Kunena backend
  */
 class KunenaAdminViewAttachments extends KunenaView
 {
-	/**
-	 *
-	 * @param   null $tpl
-	 *
-	 * @return mixed
-	 */
 	function display($tpl = null)
 	{
 		$this->setToolbar();
@@ -47,25 +41,34 @@ class KunenaAdminViewAttachments extends KunenaView
 
 	}
 
-	/**
-	 *
-	 */
 	protected function setToolbar()
 	{
 		$help_url  = 'https://www.kunena.org/docs/';
-		JToolBarHelper::help('COM_KUNENA', false, $help_url);
-		JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_FILE_MANAGER'), 'folder-open');
+		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
+		// Set the titlebar text
+		if (version_compare(JVERSION, '3', '>'))
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_FILE_MANAGER'), 'folder-open');
+		}
+		else
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_FILE_MANAGER'), 'files');
+		}
+
 		JToolBarHelper::spacer();
-		JToolBarHelper::custom('delete', 'trash.png', 'trash_f2.png', 'COM_KUNENA_GEN_DELETE');
+
+		if (version_compare(JVERSION, '3', '>'))
+		{
+			JToolBarHelper::custom('delete', 'trash.png', 'trash_f2.png', 'COM_KUNENA_GEN_DELETE');
+		}
+		else
+		{
+			JToolBarHelper::custom('delete', 'delete.png', 'delete_f2.png', 'COM_KUNENA_GEN_DELETE');
+		}
 
 		JToolBarHelper::spacer();
 	}
 
-	/**
-	 * Returns an array of review filter options.
-	 *
-	 * @return    array
-	 */
 	protected function getSortFields()
 	{
 		$sortFields   = array();
@@ -79,16 +82,14 @@ class KunenaAdminViewAttachments extends KunenaView
 		return $sortFields;
 	}
 
-	/**
-	 * Returns an array of review filter options.
-	 *
-	 * @return    array
-	 */
 	protected function getSortDirectionFields()
 	{
 		$sortDirection = array();
-		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
-		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
+//		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('JGLOBAL_ORDER_ASCENDING'));
+//		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('JGLOBAL_ORDER_DESCENDING'));
+		// TODO: remove it when J2.5 support is dropped
+		$sortDirection[] = JHtml::_('select.option', 'asc', JText::_('COM_KUNENA_FIELD_LABEL_ASCENDING'));
+		$sortDirection[] = JHtml::_('select.option', 'desc', JText::_('COM_KUNENA_FIELD_LABEL_DESCENDING'));
 
 		return $sortDirection;
 	}

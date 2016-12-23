@@ -6,20 +6,23 @@ $doc->addLessStyleSheet(JUri::root().'modules/mod_wishlist/assets/less/mod_wishl
 ?>
 <div id="mod_wishlist_<?php echo $module->id ?>" class="mod_wishlist">
     <div class="group_like_cart">
-        <div class="fl header_like wishlist" title="<?php echo JText::_('Wish list') ?>" >
+        <div class="fl header_like wishlist" title="<?php echo JText::_('Sản phẩm yêu thích') ?>" >
             <a rel="nofollow" href="#" class="follow">
                 <i class="icon_vg40 icon_vg40_like"></i>
-                <span><?php echo JText::_('Wish list')?></span>
+                <span>Yêu thích</span>
                 <div class="notify">0</div>
             </a>
         </div>
         <div class="wrapper-wishlist">
-            <ul class="dropdown-menu">
-                <li><a href="#">HTML</a></li>
-                <li><a href="#">CSS</a></li>
-                <li><a href="#">JavaScript</a></li>
-            </ul>
-        </div>
+            <?php
+            if(!empty($html)){
+                ?>
+                <div class="hikashop_wishlist_module" id="hikashop_wishlist_module">
+                    <?php echo $html; ?>
+                </div>
+            <?php } ?>
+
+            </div>
 
     </div>
 </div>

@@ -2,42 +2,24 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Controllers
+ * @package       Kunena.Administrator
+ * @subpackage    Controllers
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Kunena Backend Config Controller
  *
- * @since  2.0
+ * @since 2.0
  */
 class KunenaAdminControllerConfig extends KunenaController
 {
-	/**
-	 *
-	 * @since    2.0.0-BETA2
-	 * @var null|string
-	 */
 	protected $baseurl = null;
 
-	/**
-	 * @since    2.0.0-BETA2
-	 * @var string
-	 */
-	protected $kunenabaseurl = null;
-
-	/**
-	 * Construct
-	 *
-	 * @param   array  $config  config
-	 *
-	 * @since    2.0.0-BETA2
-	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
@@ -45,28 +27,12 @@ class KunenaAdminControllerConfig extends KunenaController
 		$this->kunenabaseurl = 'administrator/index.php?option=com_kunena';
 	}
 
-	/**
-	 * Apply
-	 *
-	 * @return void
-	 *
-	 * @since    2.0.0-BETA2
-	 */
-	public function apply()
+	function apply()
 	{
 		$this->save($this->baseurl);
 	}
 
-	/**
-	 * Save
-	 *
-	 * @param   null  $url  url
-	 *
-	 * @return void
-	 *
-	 * @since    2.0.0-BETA2
-	 */
-	public function save($url = null)
+	function save($url = null)
 	{
 		if (!JSession::checkToken('post'))
 		{
@@ -77,22 +43,16 @@ class KunenaAdminControllerConfig extends KunenaController
 		}
 
 		$properties = $this->config->getProperties();
-		
-		$post_config = $this->app->input->post->getArray();
-		
-		// TODO: fix depricated value
-		foreach ($post_config as $postsetting => $postvalue)
+		foreach (JRequest::get('post', JREQUEST_ALLOWHTML) as $postsetting => $postvalue)
 		{
-			if (Joomla\String\StringHelper::strpos($postsetting, 'cfg_') === 0)
+			if (JString::strpos($postsetting, 'cfg_') === 0)
 			{
-				// Remove cfg_ and force lower case
-
+				//remove cfg_ and force lower case
 				if (is_array($postvalue))
 				{
 					$postvalue = implode(',', $postvalue);
 				}
-
-				$postname = Joomla\String\StringHelper::strtolower(Joomla\String\StringHelper::substr($postsetting, 4));
+				$postname = JString::strtolower(JString::substr($postsetting, 4));
 
 				// No matter what got posted, we only store config parameters defined
 				// in the config class. Anything else posted gets ignored.
@@ -117,14 +77,7 @@ class KunenaAdminControllerConfig extends KunenaController
 		$this->setRedirect(KunenaRoute::_($url, false));
 	}
 
-	/**
-	 * Set default
-	 *
-	 * @return void
-	 *
-	 * @since    2.0.0-BETA2
-	 */
-	public function setdefault()
+	function setdefault()
 	{
 		if (!JSession::checkToken('post'))
 		{

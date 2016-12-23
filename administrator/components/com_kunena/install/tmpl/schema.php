@@ -2,16 +2,17 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Installer
- * @subpackage  Template
+ * @package       Kunena.Installer
+ * @subpackage    Template
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
-// @var KunenaViewInstall $this
+/** @var KunenaViewInstall $this */
+
 $this->document->addStyleSheet(JUri::base(true) . '/components/com_kunena/install/media/install.css');
 ?>
 <div id="right">

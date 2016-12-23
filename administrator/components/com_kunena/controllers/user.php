@@ -2,22 +2,23 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Controllers
+ * @package       Kunena.Administrator
+ * @subpackage    Controllers
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 require_once __DIR__ . '/users.php';
 
 /**
  * Kunena User Controller
  *
- * @since  3.0
+ * @since 3.0
  */
 class KunenaAdminControllerUser extends KunenaAdminControllerUsers
 {
+
 }

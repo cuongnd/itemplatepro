@@ -159,6 +159,7 @@ class JFormFieldMenuitem extends JFormFieldGroupedList
 
 		// Get the menu items.
 		$items = MenusHelper::getMenuLinks($menuType, 0, 0, $this->published, $this->language);
+
 		// Build group for a specific menu type.
 		if ($menuType)
 		{

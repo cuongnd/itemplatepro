@@ -89,6 +89,11 @@ abstract class ModLanguagesHelper
 			// Do not display language without specific home menu
 			elseif (!isset($homes[$language->lang_code]))
 			{
+				echo "<pre>";
+				print_r($homes, false);
+				print_r($language->lang_code, false);
+				echo "<pre>";
+				die;
 				unset($languages[$i]);
 			}
 			// Do not display language without authorized access level

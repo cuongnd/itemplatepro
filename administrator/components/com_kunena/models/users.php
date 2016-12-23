@@ -2,28 +2,29 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Models
+ * @package       Kunena.Administrator
+ * @subpackage    Models
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 jimport('joomla.application.component.modellist');
 
 /**
  * Users Model for Kunena
  *
- * @since  2.0
+ * @since 2.0
  */
 class KunenaAdminModelUsers extends JModelList
 {
+
 	/**
 	 * Constructor.
 	 *
-	 * @param   array $config An optional associative array of configuration settings.
+	 * @param    array $config An optional associative array of configuration settings.
 	 *
 	 * @see        JController
 	 */
@@ -37,7 +38,6 @@ class KunenaAdminModelUsers extends JModelList
 				'name',
 				'rank',
 				'email',
-				'ip',
 				'signature',
 				'enabled',
 				'banned',
@@ -52,11 +52,6 @@ class KunenaAdminModelUsers extends JModelList
 
 	/**
 	 * Method to auto-populate the model state.
-	 *
-	 * @param null $ordering
-	 * @param null $direction
-	 *
-	 * @throws Exception
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
@@ -83,9 +78,6 @@ class KunenaAdminModelUsers extends JModelList
 
 		$filter_active .= $value = $this->getUserStateFromRequest($this->context . '.filter.email', 'filter_email', '', 'string');
 		$this->setState('filter.email', $value);
-
-		$filter_active .= $value = $this->getUserStateFromRequest($this->context . '.filter.ip', 'filter_ip', '', 'string');
-		$this->setState('filter.ip', $value);
 
 		$filter_active .= $value = $this->getUserStateFromRequest($this->context . '.filter.rank', 'filter_rank', '', 'string');
 		$this->setState('filter.rank', $value);
@@ -115,7 +107,7 @@ class KunenaAdminModelUsers extends JModelList
 	 * different modules that might need different sets of data or different
 	 * ordering requirements.
 	 *
-	 * @param   string $id A prefix for the store id.
+	 * @param    string $id A prefix for the store id.
 	 *
 	 * @return    string        A store id.
 	 */
@@ -125,7 +117,6 @@ class KunenaAdminModelUsers extends JModelList
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.username');
 		$id .= ':' . $this->getState('filter.email');
-		$id .= ':' . $this->getState('filter.ip');
 		$id .= ':' . $this->getState('filter.rank');
 		$id .= ':' . $this->getState('filter.signature');
 		$id .= ':' . $this->getState('filter.block');
@@ -139,7 +130,6 @@ class KunenaAdminModelUsers extends JModelList
 	 * Build an SQL query to load the list data.
 	 *
 	 * @return    JDatabaseQuery
-	 *
 	 */
 	protected function getListQuery()
 	{
@@ -171,7 +161,7 @@ class KunenaAdminModelUsers extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.username LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR a.email LIKE ' . $search . ' OR ku.ip LIKE ' . $search . ' OR a.id LIKE ' . $search . ')');
+				$query->where('(a.username LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR a.email LIKE ' . $search . ')');
 			}
 		}
 
@@ -202,15 +192,6 @@ class KunenaAdminModelUsers extends JModelList
 			$query->where('a.email LIKE ' . $email);
 		}
 
-		// Filter by IP.
-		$ip = $this->getState('filter.ip');
-
-		if (!empty($ip))
-		{
-			$ip = $db->Quote('%' . $db->escape($ip, true) . '%');
-			$query->where('ku.ip LIKE ' . $ip);
-		}
-
 		// Filter by signature.
 		$filter = $this->getState('filter.signature');
 
@@ -239,7 +220,7 @@ class KunenaAdminModelUsers extends JModelList
 
 		if ($filter !== '')
 		{
-			$now = new JDate;
+			$now = new JDate ();
 
 			if ($filter)
 			{
@@ -270,9 +251,6 @@ class KunenaAdminModelUsers extends JModelList
 			case 'email':
 				$query->order('a.email ' . $direction);
 				break;
-			case 'ip':
-				$query->order('ku.ip ' . $direction);
-				break;
 			case 'rank':
 				$query->order('ku.rank ' . $direction);
 				break;
@@ -296,6 +274,7 @@ class KunenaAdminModelUsers extends JModelList
 				$query->order('a.username ' . $direction);
 		}
 
+		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;
 	}
 
@@ -348,9 +327,9 @@ class KunenaAdminModelUsers extends JModelList
 	 * Method to get html list of Kunena categories
 	 *
 	 * @return  string
-	 *
 	 * @since  3.0
 	 */
+	//TODO: Move this to view.
 	public function getModcatslist()
 	{
 		$options = array();

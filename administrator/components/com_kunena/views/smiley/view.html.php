@@ -2,27 +2,20 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Views
+ * @package       Kunena.Administrator
+ * @subpackage    Views
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * About view for Kunena smiley backend
- *
- * @since  K1.X
  */
 class KunenaAdminViewSmiley extends KunenaView
 {
-	/**
-	 * @param   null $tpl
-	 *
-	 * @return mixed|void
-	 */
 	public function display($tpl = null)
 	{
 		$this->setLayout('edit');
@@ -35,17 +28,22 @@ class KunenaAdminViewSmiley extends KunenaView
 		parent::display($tpl);
 	}
 
-	/**
-	 *
-	 */
 	protected function setToolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'thumbs-up');
+		if (version_compare(JVERSION, '3', '>'))
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'thumbs-up');
+		}
+		else
+		{
+			JToolBarHelper::title(JText::_('COM_KUNENA') . ': ' . JText::_('COM_KUNENA_EMOTICON_MANAGER'), 'smilies');
+		}
+
 		JToolBarHelper::spacer();
 		JToolBarHelper::save('save');
 		JToolBarHelper::spacer();
 		JToolBarHelper::cancel();
 		$help_url  = 'https://www.kunena.org/docs/Smiley_management';
-		JToolBarHelper::help('COM_KUNENA', false, $help_url);
+		JToolBarHelper::help( 'COM_KUNENA', false, $help_url );
 	}
 }

@@ -2,14 +2,14 @@
 /**
  * Kunena Plugin
  *
- * @package     Kunena.Plugins
- * @subpackage  Joomla
+ * @package       Kunena.Plugins
+ * @subpackage    Joomla
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 class KunenaLoginJoomla
 {
@@ -50,7 +50,7 @@ class KunenaLoginJoomla
 	}
 
 	/**
-	 * @return boolean|string
+	 * @return bool|string
 	 * @throws Exception
 	 */
 	public function logoutUser()
@@ -61,7 +61,7 @@ class KunenaLoginJoomla
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getRememberMe()
 	{

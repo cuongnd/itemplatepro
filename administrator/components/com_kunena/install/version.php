@@ -2,23 +2,20 @@
 /**
  * Kunena Component
  *
- * @package    Kunena.Installer
+ * @package       Kunena.Installer
  *
- * @copyright  (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link       https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
-/**
- * Class KunenaVersion
- */
 class KunenaVersion
 {
 	/**
 	 * Get warning for unstable releases
 	 *
-	 * @param   string $msg Message to be shown containing two %s parameters for version (2.0.0RC) and version type (GIT, RC, BETA etc)
+	 * @param    string $msg Message to be shown containing two %s parameters for version (2.0.0RC) and version type (GIT, RC, BETA etc)
 	 *
 	 * @return    string    Warning message
 	 * @since    1.6
@@ -71,9 +68,6 @@ class KunenaVersion
 		return '';
 	}
 
-	/**
-	 * @return boolean
-	 */
 	function checkVersion()
 	{
 		$version = $this->getDBVersion();
@@ -113,7 +107,7 @@ class KunenaVersion
 
 		if (!isset($version) || !is_object($version) || !isset($version->state))
 		{
-			$version        = new stdClass;
+			$version        = new stdClass();
 			$version->state = '';
 		}
 		elseif (!empty($version->state))
@@ -159,6 +153,7 @@ class KunenaVersion
 	{
 		return self::getVersionHTML() . ' | ' . self::getCopyrightHTML();
 	}
+
 }
 
 class KunenaVersionException extends Exception

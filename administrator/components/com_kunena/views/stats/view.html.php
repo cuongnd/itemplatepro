@@ -2,27 +2,21 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Views
+ * @package       Kunena.Administrator
+ * @subpackage    Views
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2014 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * About view for Kunena stats backend
- *
- * @since  K1.X
  */
 class KunenaAdminViewStats extends KunenaView
 {
-	/**
-	 *
-	 * @internal param null $tpl
-	 */
-	function displayDefault()
+	function displayDefault($tpl = null)
 	{
 		JToolBarHelper::title(JText::_('COM_KUNENA'), 'kunena.png');
 
@@ -31,7 +25,7 @@ class KunenaAdminViewStats extends KunenaView
 
 		$kunena_stats = KunenaForumStatistics::getInstance();
 		$kunena_stats->loadAll(true);
-		$this->kunena_stats = $kunena_stats;
+		$this->assign($kunena_stats);
 
 		$this->display();
 	}

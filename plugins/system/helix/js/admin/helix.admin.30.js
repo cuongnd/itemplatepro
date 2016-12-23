@@ -25,7 +25,7 @@ jQuery(function($){
 
         //Icons
         $('<i class="fa fa-info-circle pull-left color1"></i>').appendTo( $('.overview-options > a') );
-        $('<i class="fa fa-home pull-left color2"></2>').appendTo( $('.basic-options > a') );
+        $('<i class="fa fa-home pull-left color2"></i>').appendTo( $('.basic-options > a') );
         $('<i class="fa fa-pencil pull-left color3"></i>').appendTo( $('.presets-options > a') );
         $('<i class="fa fa-th pull-left color4"></i>').appendTo( $('.layout-options > a') );
         $('<i class="fa fa-list pull-left color5"></i>').appendTo( $('.menu-options > a') );
@@ -104,7 +104,7 @@ jQuery(function($){
         $('.info-labels').unwrap();
 
         $('.group_separator.in_group').each(function(){
-            $(this).parent().parent().addClass('in_group span2');
+            $(this).parent().parent().addClass('in_group');
         });
         $('.group_separator.no_group').each(function(){
             $(this).parent().parent().addClass('no_group');

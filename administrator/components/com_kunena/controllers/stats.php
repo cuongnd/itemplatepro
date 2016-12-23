@@ -2,31 +2,24 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Controllers
+ * @package       Kunena.Administrator
+ * @subpackage    Controllers
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * Kunena Backend Stats Controller
  *
- * @since  2.0
+ * @since 2.0
  */
 class KunenaAdminControllerStats extends KunenaController
 {
 	protected $baseurl = null;
 
-	/**
-	 * Construct
-	 *
-	 * @param   array  $config  config
-	 *
-	 * @since    2.0
-	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);

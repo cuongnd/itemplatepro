@@ -2,30 +2,25 @@
 /**
  * Kunena Component
  *
- * @package    Kunena.Installer
+ * @package       Kunena.Installer
  *
- * @copyright  (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link       https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 /**
  * The Kunena Installer Controller
  *
- * @since  1.6
+ * @since        1.6
  */
 class KunenaControllerInstall extends JControllerLegacy
 {
 	protected $step = null;
-
 	protected $steps = null;
-
 	protected $model = null;
 
-	/**
-	 *
-	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -35,14 +30,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		$this->steps = $this->model->getSteps();
 	}
 
-	/**
-	 * @param   bool $cachable
-	 * @param   bool $urlparams
-	 *
-	 * @return JControllerLegacy|void
-	 *
-	 * @throws Exception
-	 */
 	public function display($cachable = false, $urlparams = false)
 	{
 		require_once __DIR__ . '/view.php';
@@ -52,7 +39,7 @@ class KunenaControllerInstall extends JControllerLegacy
 		{
 			$view->addTemplatePath(__DIR__ . '/tmpl');
 			$view->setModel($this->model, true);
-			$view->setLayout(JFactory::getApplication()->input->getWord('layout', 'default'));
+			$view->setLayout(JRequest::getWord('layout', 'default'));
 			$view->document = JFactory::getDocument();
 			$view->display();
 
@@ -64,9 +51,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		}
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	public function run()
 	{
 		if (!JSession::checkToken('post'))
@@ -111,7 +95,6 @@ class KunenaControllerInstall extends JControllerLegacy
 			$session->set('kunena.newqueue', null);
 			$this->model->setStep(++$this->step);
 		}
-
 		do
 		{
 			$this->runStep();
@@ -143,10 +126,9 @@ class KunenaControllerInstall extends JControllerLegacy
 		ob_end_clean();
 
 		JFactory::getDocument()->setMimeEncoding('application/json');
-		JFactory::getApplication()->setHeader('Content-Disposition', 'attachment;filename="kunena-install.json"');
+		JResponse::setHeader('Content-Disposition', 'attachment;filename="kunena-install.json"');
 
 		$percent = intval(99 * $this->step / count($this->steps));
-
 		if ($error)
 		{
 			echo json_encode(array('success' => false, 'status' => "{$percent}%", 'error' => $error, 'log' => $log));
@@ -164,9 +146,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		JFactory::getApplication()->close();
 	}
 
-	/**
-	 * @throws Exception
-	 */
 	function uninstall()
 	{
 		if (!JSession::checkToken('get'))
@@ -191,19 +170,19 @@ class KunenaControllerInstall extends JControllerLegacy
 			$component = JComponentHelper::getComponent('com_kunena');
 			$installer->uninstall('component', $component->id);
 
-			if (JFolder::exists(KPATH_MEDIA))
+			if ( JFolder::exists(KPATH_MEDIA) )
 			{
 				JFolder::delete(KPATH_MEDIA);
 			}
 
-			if (JFolder::exists(JPATH_ROOT . '/plugins/kunena'))
+			if ( JFolder::exists(JPATH_ROOT.'/plugins/kunena') )
 			{
-				JFolder::delete(JPATH_ROOT . '/plugins/kunena');
+				JFolder::delete(JPATH_ROOT.'/plugins/kunena');
 			}
 
-			if (JFile::exists(JPATH_ADMINISTRATOR . '/manifests/packages/pkg_kunena.xml'))
+			if ( JFile::exists(JPATH_ADMINISTRATOR.'/manifests/packages/pkg_kunena.xml') )
 			{
-				JFile::delete(JPATH_ADMINISTRATOR . '/manifests/packages/pkg_kunena.xml');
+				JFile::delete(JPATH_ADMINISTRATOR.'/manifests/packages/pkg_kunena.xml');
 			}
 
 			$this->setRedirect('index.php?option=com_installer');
@@ -214,10 +193,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		}
 	}
 
-	/**
-	 * @return mixed|null
-	 *
-	 */
 	function runStep()
 	{
 		if (empty($this->steps[$this->step]['step']))
@@ -228,10 +203,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		return call_user_func(array($this->model, "step" . $this->steps[$this->step]['step']));
 	}
 
-	/**
-	 * @param $type
-	 * @param $errstr
-	 */
 	static public function error($type, $errstr)
 	{
 		$model = JModelLegacy::getInstance('Install', 'KunenaModel');
@@ -239,12 +210,6 @@ class KunenaControllerInstall extends JControllerLegacy
 		echo json_encode(array('success' => false, 'html' => $errstr));
 	}
 
-	/**
-	 * @param $exception
-	 *
-	 * @return boolean
-	 *
-	 */
 	static public function exceptionHandler($exception)
 	{
 		self::error('', 'Uncaught Exception: ' . $exception->getMessage());
@@ -252,18 +217,9 @@ class KunenaControllerInstall extends JControllerLegacy
 		return true;
 	}
 
-	/**
-	 * @param $errno
-	 * @param $errstr
-	 * @param $errfile
-	 * @param $errline
-	 *
-	 * @return boolean
-	 *
-	 */
 	static public function errorHandler($errno, $errstr, $errfile, $errline)
 	{
-		// Self::error('', "Fatal Error: $errstr in $errfile on line $errline");
+		//self::error('', "Fatal Error: $errstr in $errfile on line $errline");
 		switch ($errno)
 		{
 			case E_ERROR:

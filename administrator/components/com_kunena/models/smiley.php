@@ -2,14 +2,14 @@
 /**
  * Kunena Component
  *
- * @package     Kunena.Administrator
- * @subpackage  Models
+ * @package       Kunena.Administrator
+ * @subpackage    Models
  *
- * @copyright   (C) 2008 - 2016 Kunena Team. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link        https://www.kunena.org
+ * @copyright (C) 2008 - 2016 Kunena Team. All rights reserved.
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link          https://www.kunena.org
  **/
-defined('_JEXEC') or die();
+defined('_JEXEC') or die ();
 
 jimport('joomla.application.component.modellist');
 
@@ -20,6 +20,7 @@ jimport('joomla.application.component.modellist');
  */
 class KunenaAdminModelSmiley extends KunenaModel
 {
+
 	/**
 	 * Method to auto-populate the model state.
 	 */
@@ -42,11 +43,6 @@ class KunenaAdminModelSmiley extends KunenaModel
 		$this->setState('item.id', $value);
 	}
 
-	/**
-	 * @return  mixed|null
-	 *
-	 * @throws Exception
-	 */
 	public function getSmiley()
 	{
 		$db = JFactory::getDBO();
@@ -56,16 +52,11 @@ class KunenaAdminModelSmiley extends KunenaModel
 		if ($id)
 		{
 			$db->setQuery("SELECT * FROM #__kunena_smileys WHERE id={$db->quote($id)}");
-			
-			try
+			$selected = $db->loadObject();
+
+			if (KunenaError::checkDatabaseError())
 			{
-				$selected = $db->loadObject();
-			}
-			catch (RuntimeException $e)
-			{
-				JFactory::getApplication()->enqueueMessage($e->getMessage());
-					
-				return;
+				return null;
 			}
 
 			return $selected;
@@ -74,10 +65,6 @@ class KunenaAdminModelSmiley extends KunenaModel
 		return null;
 	}
 
-	/**
-	 * @return  mixed
-	 *
-	 */
 	public function getSmileyspaths()
 	{
 		$template = KunenaFactory::getTemplate();

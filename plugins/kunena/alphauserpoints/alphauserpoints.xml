@@ -2,8 +2,8 @@
 <!DOCTYPE extension>
 <extension version="2.5" type="plugin" group="kunena" method="upgrade">
 	<name>plg_kunena_alphauserpoints</name>
-	<version>5.0.2</version>
-	<creationDate>2016-10-01</creationDate>
+	<version>4.0.11</version>
+	<creationDate>2016-06-05</creationDate>
 	<author>Kunena Team</author>
 	<authorEmail>Kunena@kunena.org</authorEmail>
 	<authorUrl>https://www.kunena.org</authorUrl>
